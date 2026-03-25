@@ -1,0 +1,306 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static game.GameEngine;
+
+namespace game
+{
+    public partial class Form3 : Form
+    {
+        private readonly string username;
+        private readonly UserManager userManager;
+        private readonly ScoreManager scoreManager;
+        private readonly GameEngine engine;
+
+        private Button playerBtn;
+        private Label timerLabel;
+
+        // support multiple power items (ups and downs)
+        private List<PowerDownBase> powerItems = new List<PowerDownBase>();
+        private System.Windows.Forms.Timer powerItemSpawner;
+        private Random rnd = new Random();
+        private const int MaxSimultaneousPowerItems = 3;
+        private readonly int spawnScoreThreshold = 0; // lowered threshold so +10 can appear earlier
+
+        // factories for different item types
+        private List<Func<Form3, PowerDownBase>> powerDownFactories = new List<Func<Form3, PowerDownBase>>();
+        private List<Func<Form3, PowerDownBase>> powerUpFactories = new List<Func<Form3, PowerDownBase>>();
+
+        public Form3(string username, UserManager userManager, ScoreManager scoreManager)
+        {
+            InitializeComponent();
+
+            this.username = username ?? "anonymous";
+            this.userManager = userManager;
+            this.scoreManager = scoreManager;
+
+            InitUI();
+
+            engine = new GameEngine(this);
+            engine.OnElapsedTimeChanged += Engine_OnElapsedTimeChanged;
+            engine.OnShootBullet += Engine_OnShootBullet;
+            engine.OnGameEnded += Engine_OnGameEnded;
+
+            engine.Start();
+
+            // register available item types — add here as you implement new ones
+            powerDownFactories.Add(f => new PowerDownScore(f));
+            powerUpFactories.Add(f => new PowerUpScore(f));
+
+            // initial power items list is empty; spawner will create instances
+            StartPowerItemSpawner();
+
+            Task.Run(() =>
+            {
+                Thread.Sleep(200);
+                while (true)
+                {
+                    if (this.IsDisposed) break;
+                    try
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            Rectangle bounds = new Rectangle(this.Left, this.Top, this.Width, this.Height);
+                            bool ended = engine.ShrinkFrame(ref bounds);
+                            if (!ended)
+                            {
+                                this.Width = bounds.Width;
+                                this.Height = bounds.Height;
+                                this.Left = bounds.Left;
+                                this.Top = bounds.Top;
+
+                                playerBtn.Location = new Point(this.ClientSize.Width / 2 - playerBtn.Width / 2,
+                                                               this.ClientSize.Height / 2 - playerBtn.Height / 2);
+                            }
+                        });
+                    }
+                    catch { break; }
+
+                    Thread.Sleep(25);
+                }
+            });
+        }
+
+        private void InitUI()
+        {
+            this.AutoSize = false;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.Size = new Size(1000, 1000);
+
+            // use crosshair cursor while playing
+            try { this.Cursor = Cursors.Cross; } catch { }
+
+            playerBtn = new Button { Width = 50, Height = 50, Location = new Point(this.Width / 2 - 25, this.Height / 2 - 25) };
+            this.Controls.Add(playerBtn);
+
+            timerLabel = new Label { Text = "0", Width = 100, Height = 50, Location = new Point(10, 10), Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            this.Controls.Add(timerLabel);
+        }
+
+        public Rectangle PlayerBounds => playerBtn.Bounds;
+        public GameEngine Engine => engine;
+
+        private void Engine_OnElapsedTimeChanged(int seconds)
+        {
+            if (!this.IsDisposed)
+                this.Invoke((MethodInvoker)(() => timerLabel.Text = seconds.ToString()));
+        }
+
+        private void Engine_OnShootBullet(Point center, Point mousePos)
+        {
+            this.Invoke((MethodInvoker)(() =>
+            {
+                Panel bullet = new Panel { Size = new Size(10, 10), BackColor = Color.Red, Location = new Point(center.X - 5, center.Y - 5) };
+                bullet.Tag = CalculateDirection(center, mousePos);
+                this.Controls.Add(bullet);
+                StartBulletMovement(bullet);
+            }));
+        }
+
+        private void StartBulletMovement(Panel bullet)
+        {
+            System.Windows.Forms.Timer movementTimer = new System.Windows.Forms.Timer { Interval = 15 };
+            movementTimer.Tick += (s, e) =>
+            {
+                PointF dir = (PointF)bullet.Tag;
+                int speed = 10;
+                bullet.Left += (int)(dir.X * speed);
+                bullet.Top += (int)(dir.Y * speed);
+
+                // check collisions with all active power items
+                for (int i = powerItems.Count - 1; i >= 0; i--)
+                {
+                    var pd = powerItems[i];
+                    if (pd == null) { powerItems.RemoveAt(i); continue; }
+
+                    if (pd.Active)
+                    {
+                        pd.CheckBulletCollision(bullet, movementTimer);
+                        if (!bullet.Visible)
+                            break; // bullet consumed
+                    }
+                    else
+                    {
+                        // clean up finished power items
+                        powerItems.RemoveAt(i);
+                    }
+                }
+
+                if (!bullet.Visible) return;
+
+                if (bullet.Left <= 0 || bullet.Right >= this.ClientSize.Width || bullet.Top <= 0 || bullet.Bottom >= this.ClientSize.Height)
+                {
+                    movementTimer.Stop();
+                    movementTimer.Dispose();
+                    HandleBulletImpact(bullet);
+                }
+            };
+
+            movementTimer.Start();
+        }
+
+        private PointF CalculateDirection(Point start, Point target)
+        {
+            float dx = target.X - start.X;
+            float dy = target.Y - start.Y;
+            float length = (float)Math.Sqrt(dx * dx + dy * dy);
+            if (length == 0) return new PointF(0, 0);
+            return new PointF(dx / length, dy / length);
+        }
+
+        private void HandleBulletImpact(Panel bullet)
+        {
+            bool hitLeft = bullet.Left <= 0;
+            bool hitRight = bullet.Right >= this.ClientSize.Width;
+            bool hitTop = bullet.Top <= 0;
+            bool hitBottom = bullet.Bottom >= this.ClientSize.Height;
+
+            int growAmount = 50;
+
+            if (hitLeft)
+            {
+                this.Left -= growAmount;
+                this.Width += growAmount;
+            }
+            else if (hitRight)
+            {
+                this.Width += growAmount;
+            }
+
+            if (hitTop)
+            {
+                this.Top -= growAmount;
+                this.Height += growAmount;
+            }
+            else if (hitBottom)
+            {
+                this.Height += growAmount;
+            }
+
+            bullet.Dispose();
+        }
+
+        private void Engine_OnGameEnded()
+        {
+            this.Invoke((MethodInvoker)(() =>
+            {
+                int finalScore = engine.GetElapsedTime();
+                try
+                {
+                    scoreManager.AppendScore(username, finalScore);
+                }
+                catch { }
+
+                if (finalScore > 50)
+                {
+                    int userId = userManager.CurrentUserId;
+
+                    string coupon = CouponGenerator.Generate(12);
+
+                    DateTime expiry = DateTime.Now.AddDays(7);
+
+                    decimal amount = 15;
+
+                    DatabaseHelper.InsertDiscount(userId, coupon, expiry, amount);
+
+                    MessageBox.Show(
+                        $"Gratulálunk!\nNyertél egy kupont:\n\n{coupon}\n\nÉrvényes: {expiry:yyyy-MM-dd}",
+                        "Kupon nyertél!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+
+                MessageBox.Show("The game has ended!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // cleanup power items and spawner
+                try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
+                foreach (var pd in powerItems) pd?.Destroy();
+                powerItems.Clear();
+
+                this.Close();
+            }));
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            engine?.Stop();
+            try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
+            foreach (var pd in powerItems) pd?.Destroy();
+            powerItems.Clear();
+            base.OnFormClosing(e);
+        }
+
+        private void StartPowerItemSpawner()
+        {
+            powerItemSpawner = new System.Windows.Forms.Timer();
+            powerItemSpawner.Interval = 5000; 
+            powerItemSpawner.Tick += (s, e) =>
+            {
+                // remove any inactive entries
+                powerItems.RemoveAll(p => p == null || !p.Active);
+
+                // spawn conditions: score threshold and keep a cap to avoid overwhelming game
+                if (engine.GetElapsedTime() >= spawnScoreThreshold && powerItems.Count < MaxSimultaneousPowerItems)
+                {
+                    // randomize whether to spawn this tick to keep gameplay varied
+                    if (rnd.NextDouble() < 0.6)
+                    {
+                        // first decide randomly whether this will be an UP or a DOWN
+                        bool spawnUp = rnd.NextDouble() < 0.5;
+
+                        List<Func<Form3, PowerDownBase>> pool = spawnUp ? powerUpFactories : powerDownFactories;
+
+                        if (pool.Count > 0)
+                        {
+                            int idx = rnd.Next(0, pool.Count);
+                            var pd = pool[idx](this);
+                            pd.Spawn();
+                            powerItems.Add(pd);
+                        }
+                    }
+                }
+
+                powerItemSpawner.Interval = rnd.Next(5000, 12000);
+            };
+            powerItemSpawner.Start();
+        }
+
+        public void StartPowerDown_ShrinkRateUp() { }
+        public void StartPowerDown_ShootPowerDown() { }
+        public void StartPowerDown_KillNotMove() { }
+        public void StartPowerDown_KillWithMove() { }
+
+        public void StartPowerUp_ScoreUp() { }
+        public void StartPowerUp_ShrinkRateUp() { }
+        public void StartPowerUp_ShootPowerUp() { }
+    }
+}

@@ -1,0 +1,23 @@
+﻿using System;
+using System.Drawing;
+
+namespace game
+{
+    // Example power-down: kills the player (for demo, reduce to zero score and end game)
+    public class PowerDownKill : PowerDownBase
+    {
+        public PowerDownKill(Form3 form) : base(form)
+        {
+            button.Text = "Kill";
+            try { button.BackColor = Color.Purple; } catch { }
+        }
+
+        protected override void OnHit()
+        {
+            // for demo: set elapsed time to 0 and end the game
+            form.Engine.SetElapsedTime(0);
+            // Optionally trigger game end - call internal method if available. We'll just show message.
+            MessageBox.Show("You hit a kill power-down! Score set to 0.", "PowerDown", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
+}

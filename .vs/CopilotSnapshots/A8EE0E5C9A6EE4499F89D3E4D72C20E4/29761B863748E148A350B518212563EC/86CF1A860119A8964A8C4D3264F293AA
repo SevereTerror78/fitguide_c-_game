@@ -1,0 +1,22 @@
+﻿using System;
+using System.Drawing;
+
+namespace game
+{
+    public class PowerUpScore : PowerDownBase
+    {
+        public PowerUpScore(Form3 form) : base(form)
+        {
+            button.Text = "+10";
+            // make it visually distinct
+            try { button.BackColor = Color.Green; } catch { }
+        }
+
+        protected override void OnHit()
+        {
+            int score = form.Engine.GetElapsedTime();
+            int newScore = score + 10;
+            form.Engine.SetElapsedTime(newScore);
+        }
+    }
+}

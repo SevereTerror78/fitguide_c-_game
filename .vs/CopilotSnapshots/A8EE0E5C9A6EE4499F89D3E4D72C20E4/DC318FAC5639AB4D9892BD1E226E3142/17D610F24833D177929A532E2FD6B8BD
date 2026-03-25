@@ -1,0 +1,254 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+
+namespace game
+{
+    public partial class Form1 : Form
+    {
+        /// <summary>
+        /// Main application menu form. Shows start/login controls and displays current user score info.
+        /// </summary>
+        private readonly UserManager userManager = new UserManager();
+        private readonly ScoreManager scoreManager = new ScoreManager();
+
+        /// <summary>
+        /// Initializes a new instance of the Form1 class, sets up UI styling and buttons.
+        /// </summary>
+        public Form1()
+        {
+            InitializeComponent();
+
+            // form baseline styling
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Size = new Size(1000, 800);
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            this.ForeColor = Color.White;
+            this.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            buttonsCreate();
+
+            this.Load += Form1_Load;
+            this.FormClosing += Form1_FormClosing;
+        }
+
+        /// <summary>
+        /// Creates and lays out the menu controls (start, login/logout, exit, score labels).
+        /// </summary>
+        private void buttonsCreate()
+        {
+            GroupBox menu = new GroupBox
+            {
+                Name = "menu",
+                Size = new Size(420, 360),
+                BackColor = Color.FromArgb(40, 60, 90),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F, FontStyle.Regular)
+            };
+            // center later in Load
+            this.Controls.Add(menu);
+
+            Label gameName = new Label
+            {
+                Name = "gameLabel",
+                Text = "Temporary name",
+                Location = new Point(20, 20),
+                Size = new Size(380, 40),
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            menu.Controls.Add(gameName);
+
+            int centerX = menu.ClientSize.Width / 2;
+
+            Button start = new Button
+            {
+                Name = "start",
+                Text = "Start",
+                Location = new Point(centerX - 90, 90),
+                Size = new Size(180, 45),
+                BackColor = Color.FromArgb(60, 180, 75),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold)
+            };
+            start.FlatAppearance.BorderSize = 0;
+            start.Click += (s, e) => gameStartBtnClick();
+            menu.Controls.Add(start);
+
+            Button loginLogout = new Button
+            {
+                Name = "loginLogout",
+                Size = new Size(220, 40),
+                Location = new Point(centerX - 110, 150),
+                BackColor = Color.FromArgb(70, 130, 180),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11F, FontStyle.Regular)
+            };
+            loginLogout.FlatAppearance.BorderSize = 0;
+            loginLogout.Click += (s, e) => loginLogoutBtnClick();
+            menu.Controls.Add(loginLogout);
+
+            Button exit = new Button
+            {
+                Name = "exit",
+                Text = "Exit",
+                Location = new Point(centerX - 90, 210),
+                Size = new Size(180, 45),
+                BackColor = Color.FromArgb(200, 60, 60),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold)
+            };
+            exit.FlatAppearance.BorderSize = 0;
+            exit.Click += (s, e) => this.Close();
+            menu.Controls.Add(exit);
+
+            Label score = new Label
+            {
+                Name = "score",
+                Text = "score: 0",
+                Location = new Point(20, 270),
+                Size = new Size(180, 30),
+                Font = new Font("Segoe UI", 10F)
+            };
+            menu.Controls.Add(score);
+
+            Label heightScore = new Label
+            {
+                Name = "heightScore",
+                Text = "High score: 0",
+                Location = new Point(220, 270),
+                Size = new Size(180, 30),
+                Font = new Font("Segoe UI", 10F)
+            };
+            menu.Controls.Add(heightScore);
+
+            UpdateLoginUI();
+        }
+
+        /// <summary>
+        /// Updates the login-related UI elements depending on current login state.
+        /// Shows username when logged in and resets score labels when logged out.
+        /// </summary>
+        private void UpdateLoginUI()
+        {
+            var loginBtn = this.Controls.Find("loginLogout", true).FirstOrDefault() as Button;
+            var gameLabel = this.Controls.Find("gameLabel", true).FirstOrDefault() as Label;
+
+            if (loginBtn == null || gameLabel == null) return;
+
+            if (userManager.IsLoggedIn)
+            {
+                loginBtn.Text = $"Logout ({userManager.CurrentUserName})";
+                gameLabel.Text = userManager.CurrentUserName;
+
+                var last = scoreManager.GetLastScore(userManager.CurrentUserName);
+                var high = scoreManager.GetHighScore(userManager.CurrentUserName);
+                var scoreLabel = this.Controls.Find("score", true).FirstOrDefault() as Label;
+                var highLabel = this.Controls.Find("heightScore", true).FirstOrDefault() as Label;
+                if (scoreLabel != null) scoreLabel.Text = "score: " + last;
+                if (highLabel != null) highLabel.Text = "High score: " + high;
+            }
+            else
+            {
+                // not logged in: reset UI to defaults
+                loginBtn.Text = "Login";
+                gameLabel.Text = "FitGuide";
+
+                var scoreLabel = this.Controls.Find("score", true).FirstOrDefault() as Label;
+                var highLabel = this.Controls.Find("heightScore", true).FirstOrDefault() as Label;
+                if (scoreLabel != null) scoreLabel.Text = "score: 0";
+                if (highLabel != null) highLabel.Text = "High score: 0";
+            }
+        }
+
+        /// <summary>
+        /// Handler for the login/logout button click. Opens the login dialog when not logged in,
+        /// and logs out the current user when logged in.
+        /// </summary>
+        public void loginLogoutBtnClick()
+        {
+            if (!userManager.IsLoggedIn)
+            {
+                Form2 frm = new Form2(userManager);
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+
+                if (userManager.IsLoggedIn)
+                {
+                    UpdateLoginUI();
+                }
+            }
+            else
+            {
+                userManager.Logout();
+                UpdateLoginUI();
+            }
+        }
+
+        /// <summary>
+        /// Starts the game by opening Form3 if the user is logged in; otherwise shows an error.
+        /// </summary>
+        public void gameStartBtnClick()
+        {
+            if (!userManager.IsLoggedIn)
+            {
+                MessageBox.Show("You are not logged in! Please log in to play.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Form3 gameForm = new Form3(userManager.CurrentUserName, userManager, scoreManager);
+            gameForm.Show();
+            this.Hide();
+            gameForm.FormClosed += (s, e) =>
+            {
+                this.Show();
+                UpdateLoginUI();
+            };
+        }
+
+        /// <summary>
+        /// Form closing event handler. Syncs user scores to the database for the current user.
+        /// </summary>
+        /// <param name="sender">Event sender.</param>
+        /// <param name="e">Form closing event args.</param>
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (userManager.IsLoggedIn)
+                {
+                    scoreManager.SyncToDatabaseForUser(userManager.CurrentUserName, userManager.CurrentUserId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while saving scores to DB: " + ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Form load event handler. Repositions the menu groupbox to center of the form.
+        /// </summary>
+        /// <param name="sender">Event sender.</param>
+        /// <param name="e">Event args.</param>
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // reposition the menu groupbox to center
+            var menu = this.Controls.Find("menu", true).FirstOrDefault() as GroupBox;
+            if (menu != null)
+            {
+                menu.Left = (this.ClientSize.Width - menu.Width) / 2;
+                menu.Top = (this.ClientSize.Height - menu.Height) / 2;
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+﻿using System;
+using System.Drawing;
+
+namespace game
+{
+    // Example power-up: big bonus
+    public class PowerUpBig : PowerDownBase
+    {
+        public PowerUpBig(Form3 form) : base(form)
+        {
+            button.Text = "+25p";
+            try { button.BackColor = Color.Gold; } catch { }
+        }
+
+        protected override void OnHit()
+        {
+            int score = form.Engine.GetElapsedTime();
+            int newScore = score + 25;
+            form.Engine.SetElapsedTime(newScore);
+            MessageBox.Show("Big bonus +25 points!", "PowerUp", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+    }
+}

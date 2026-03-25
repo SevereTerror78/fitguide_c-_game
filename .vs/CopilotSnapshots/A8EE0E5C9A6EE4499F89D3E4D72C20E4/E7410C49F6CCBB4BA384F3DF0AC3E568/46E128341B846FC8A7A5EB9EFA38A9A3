@@ -1,0 +1,102 @@
+﻿using Org.BouncyCastle.Crypto.Generators;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+
+namespace game
+{
+    public class UserManager
+    {
+        public int CurrentUserId { get; private set; } = -1;
+        public string CurrentUserName { get; private set; } = "";
+        public string CurrentUserEmail { get; private set; } = "";
+
+        private readonly string LastLoginPath = Path.Combine(Application.StartupPath, "last_login.txt");
+
+        public bool IsLoggedIn => CurrentUserId > 0;
+
+        public void Logout()
+        {
+            CurrentUserId = -1;
+            CurrentUserName = "";
+            CurrentUserEmail = "";
+        }
+
+        public string LoadLastEmail()
+        {
+            try
+            {
+                if (File.Exists(LastLoginPath))
+                    return File.ReadAllText(LastLoginPath).Trim();
+            }
+            catch { }
+            return "";
+        }
+
+        public void SaveLastEmail(string email)
+        {
+            try
+            {
+                File.WriteAllText(LastLoginPath, email ?? "");
+            }
+            catch { }
+        }
+        public bool TryLogin(string email, string password, out string failureMessage)
+        {
+            failureMessage = null;
+            try
+            {
+                var row = DatabaseHelper.GetUserByEmail(email);
+                if (row == null)
+                {
+                    failureMessage = "Email not found.";
+                    return false;
+                }
+                /*
+                var (id, name, dbPassword) = row.Value;
+                if (dbPassword != password)
+                {
+                    failureMessage = "Incorrect password.";
+                    return false;
+                }*/
+
+                var (id, name, dbPassword) = row.Value;
+                bool ok = false;
+
+                // plain equality (legacy plain-text accounts)
+                if (dbPassword == password) ok = true;
+                // bcrypt verification (modern, secure)
+                else
+                {
+                    try
+                    {
+                        ok = BCrypt.Net.BCrypt.Verify(password, dbPassword);
+                    }
+                    catch { ok = false; }
+                }
+
+                if (!ok)
+                {
+                    failureMessage = "Incorrect password.";
+                    return false;
+                }
+
+                CurrentUserId = id;
+                CurrentUserName = name;
+                CurrentUserEmail = email;
+                SaveLastEmail(email);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                failureMessage = "Error while logging in: " + ex.Message;
+                return false;
+            }
+        }
+    }
+}

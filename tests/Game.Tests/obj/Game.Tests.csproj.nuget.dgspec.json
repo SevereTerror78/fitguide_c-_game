@@ -1,0 +1,108 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\Game.Tests.csproj": {}
+  },
+  "projects": {
+    "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\game.csproj": {
+      "restore": {
+        "projectUniqueName": "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\game.csproj",
+        "projectName": "game",
+        "projectPath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\game.csproj",
+        "packagesPath": "C:\\Users\\barna\\.nuget\\packages\\",
+        "projectStyle": "PackagesConfig",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "C:\\Users\\barna\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low"
+        },
+        "packagesConfigPath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\packages.config"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\Game.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\Game.Tests.csproj",
+        "projectName": "Game.Tests",
+        "projectPath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\Game.Tests.csproj",
+        "packagesPath": "C:\\Users\\barna\\.nuget\\packages\\",
+        "outputPath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\barna\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "targetAlias": "net472",
+            "projectReferences": {
+              "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\game.csproj": {
+                "projectPath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\game\\game.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net472": {
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.9.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.3.1, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

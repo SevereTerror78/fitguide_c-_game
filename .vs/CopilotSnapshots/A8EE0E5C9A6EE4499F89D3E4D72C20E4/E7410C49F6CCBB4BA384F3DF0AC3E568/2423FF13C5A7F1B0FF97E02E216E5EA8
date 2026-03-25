@@ -1,0 +1,242 @@
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Xml.Linq;
+
+
+namespace game
+{
+    public partial class Form2 : Form
+    {
+        private readonly UserManager userManager;
+        private TextBox emailBox;
+        private TextBox passwordBox;
+
+        public Form2(UserManager userManager)
+        {
+            InitializeComponent();
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            InitLayout();
+            this.Load += Form2_Load;
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            this.Size = new Size(1000, 800);
+            this.Text = "Login/Register";
+
+            var last = userManager.LoadLastEmail();
+            if (!string.IsNullOrWhiteSpace(last))
+            {
+                emailBox.Text = last;
+                passwordBox.Focus();
+            }
+        }
+
+        private void InitLayout()
+        {
+            GroupBox loginBox = new GroupBox
+            {
+                Name = "login",
+                Text = "Login",
+                Size = new Size(400, 300),
+                Location = new Point(100, 100),
+                BackColor = Color.FromArgb(91, 133, 196)
+            };
+            this.Controls.Add(loginBox);
+
+            int startY = 40;
+            int labelWidth = 100;
+            int textBoxWidth = 200;
+            int height = 30;
+            int spacing = 40;
+
+            Label emailLabel = new Label 
+            {   
+                Text = "Email:", 
+                Location = new Point(30, startY),
+                Size = new Size(labelWidth, height) 
+            };
+
+            loginBox.Controls.Add(emailLabel);
+
+            emailBox = new TextBox 
+            { 
+                Name = "email", 
+                Location = new Point(130, startY),
+                Size = new Size(textBoxWidth, height) };
+            loginBox.Controls.Add(emailBox);
+
+            Label passwordLabel = new Label 
+            {
+                Text = "Jelszó:", 
+                Location = new Point(30, startY + spacing), 
+                Size = new Size(labelWidth, height) 
+            };
+            loginBox.Controls.Add(passwordLabel);
+
+            passwordBox = new TextBox 
+            { 
+                Name = "password", 
+                UseSystemPasswordChar = true, 
+                Location = new Point(130, startY + spacing), 
+                Size = new Size(textBoxWidth, height) 
+            };
+            loginBox.Controls.Add(passwordBox);
+
+            Button loginButton = new Button 
+            { 
+                Text = "Bejelentkezés", 
+                Size = new Size(150, 40), 
+                Location = new Point(125, startY + spacing * 2) 
+            };
+            loginButton.Click += (s, e) => DoLogin();
+            loginBox.Controls.Add(loginButton);
+
+
+            Button backButton = new Button 
+            { 
+                Text = "Back", 
+                Size = new Size(150, 40), 
+                Location = new Point(650, 650) 
+            };
+            backButton.Click += (s, e) => this.Close();
+            this.Controls.Add(backButton);
+        }
+
+        private void DoLogin()
+        {
+            string email = emailBox.Text.Trim();
+            string pwd = passwordBox.Text;
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pwd))
+            {
+                MessageBox.Show("You didn't fill everything!", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (userManager.TryLogin(email, pwd, out string failMsg))
+            {
+                MessageBox.Show($"Login successful! Welcome {userManager.CurrentUserName}");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show(failMsg ?? "Login failed", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}
+
+/*
+GroupBox registerBox = new GroupBox
+{
+    Name = "register",
+    Text = "Register",
+    Size = new Size(400, 300),
+    Location = new Point(550, 100),
+    BackColor = Color.FromArgb(91, 133, 196)
+};
+this.Controls.Add(registerBox);
+
+int rStartY = 40;
+Label nameLabel = new Label { Text = "Név:", Location = new Point(30, rStartY), Size = new Size(labelWidth, height) };
+registerBox.Controls.Add(nameLabel);
+TextBox nameBox = new TextBox { Name = "registerName", Location = new Point(130, rStartY), Size = new Size(textBoxWidth, height) };
+registerBox.Controls.Add(nameBox);
+
+rStartY += spacing;
+Label emailRLabel = new Label { Text = "Email:", Location = new Point(30, rStartY), Size = new Size(labelWidth, height) };
+registerBox.Controls.Add(emailRLabel);
+TextBox emailR = new TextBox { Name = "registerEmail", Location = new Point(130, rStartY), Size = new Size(textBoxWidth, height) };
+registerBox.Controls.Add(emailR);
+
+rStartY += spacing;
+Label pwdRLabel = new Label { Text = "Jelszó:", Location = new Point(30, rStartY), Size = new Size(labelWidth, height) };
+registerBox.Controls.Add(pwdRLabel);
+TextBox pwdR = new TextBox { Name = "registerPassword", UseSystemPasswordChar = true, Location = new Point(130, rStartY), Size = new Size(textBoxWidth, height) };
+registerBox.Controls.Add(pwdR);
+
+rStartY += spacing;
+Label confirmLabel = new Label { Text = "Jelszó ismét:", Location = new Point(30, rStartY), Size = new Size(labelWidth, height) };
+registerBox.Controls.Add(confirmLabel);
+TextBox confirmPwd = new TextBox { Name = "confirmPassword", UseSystemPasswordChar = true, Location = new Point(130, rStartY), Size = new Size(textBoxWidth, height) };
+registerBox.Controls.Add(confirmPwd);
+
+rStartY += spacing;
+Button registerButton = new Button { Text = "Regisztráció", Size = new Size(150, 40), Location = new Point(125, rStartY) };
+registerButton.Click += (s, e) =>
+{
+    var name = nameBox.Text;
+    var email = emailR.Text;
+    var pwd = pwdR.Text;
+    var conf = confirmPwd.Text;
+    if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pwd))
+    {
+        MessageBox.Show("You didn't fill everything!", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+    }
+    if (pwd != conf)
+    {
+        MessageBox.Show("Passwords do not match!", "error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        return;
+    }
+    try
+    {
+        string mysqlCon = DatabaseHelper.ConnectionString;
+        using (var conn = new MySql.Data.MySqlClient.MySqlConnection(mysqlCon))
+        {
+            conn.Open();
+            string check = "SELECT COUNT(*) FROM users WHERE email = @e";
+            using (var chk = new MySql.Data.MySqlClient.MySqlCommand(check, conn))
+            {
+                chk.Parameters.AddWithValue("@e", email);
+                long c = (long)chk.ExecuteScalar();
+                if (c > 0)
+                {
+                    MessageBox.Show("Email already registered.");
+                    return;
+                }
+            }
+
+            string curTime = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            string insert = @"INSERT INTO users (name, email, email_verified_at, password, remember_token, created_at, updated_at)
+                              VALUES (@n, @e, @v, @p, '', @c, @u)";
+            using (var cmd = new MySql.Data.MySqlClient.MySqlCommand(insert, conn))
+            {
+                cmd.Parameters.AddWithValue("@n", name);
+                cmd.Parameters.AddWithValue("@e", email);
+                cmd.Parameters.AddWithValue("@v", curTime);
+                cmd.Parameters.AddWithValue("@p", pwd);
+                cmd.Parameters.AddWithValue("@c", curTime);
+                cmd.Parameters.AddWithValue("@u", curTime);
+                cmd.ExecuteNonQuery();
+                long lastId = cmd.LastInsertedId;
+                string gameInsert = "INSERT INTO game (user_id, score, highScore) VALUES (@uid, 0, 0)";
+                using (var gcmd = new MySql.Data.MySqlClient.MySqlCommand(gameInsert, conn))
+                {
+                    gcmd.Parameters.AddWithValue("@uid", lastId);
+                    gcmd.ExecuteNonQuery();
+                }
+            }
+            MessageBox.Show("Registration successful!");
+            userManager.SaveLastEmail(email);
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show("Error: " + ex.Message);
+    }
+};
+registerBox.Controls.Add(registerButton);
+*/

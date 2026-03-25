@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "idmoRwRVxJA=",
+  "success": true,
+  "projectFilePath": "D:\\xampp\\htdocs\\vizsgaremek\\game\\tests\\Game.Tests\\Game.Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\barna\\.nuget\\packages\\microsoft.codecoverage\\17.9.0\\microsoft.codecoverage.17.9.0.nupkg.sha512",
+    "C:\\Users\\barna\\.nuget\\packages\\microsoft.net.test.sdk\\17.9.0\\microsoft.net.test.sdk.17.9.0.nupkg.sha512",
+    "C:\\Users\\barna\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512",
+    "C:\\Users\\barna\\.nuget\\packages\\nunit3testadapter\\4.3.1\\nunit3testadapter.4.3.1.nupkg.sha512"
+  ],
+  "logs": []
+}

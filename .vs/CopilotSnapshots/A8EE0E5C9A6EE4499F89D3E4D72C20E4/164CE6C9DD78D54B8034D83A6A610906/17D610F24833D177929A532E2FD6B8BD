@@ -1,0 +1,185 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+
+namespace game
+{
+    public partial class Form1 : Form
+    {
+        private readonly UserManager userManager = new UserManager();
+        private readonly ScoreManager scoreManager = new ScoreManager();
+
+        public Form1()
+        {
+            InitializeComponent();
+            buttonsCreate();
+
+            this.FormClosing += Form1_FormClosing;
+        }
+
+        private void buttonsCreate()
+        {
+            GroupBox menu = new GroupBox
+            {
+                Name = "menu",
+                Size = new Size(500, 500),
+                Location = new Point(250, 50),
+                BackColor = Color.FromArgb(91, 133, 196)
+            };
+            this.Controls.Add(menu);
+
+            Button loginLogout = new Button
+            {
+                Name = "loginLogout",
+                Size = new Size(120, 30),
+                Location = new Point(350, 20)
+            };
+            loginLogout.Click += (s, e) => loginLogoutBtnClick();
+            menu.Controls.Add(loginLogout);
+
+            Label gameName = new Label
+            {
+                Name = "gameLabel",
+                Text = "Temporary name",
+                Location = new Point(150, 20),
+                Size = new Size(200, 30)
+            };
+            menu.Controls.Add(gameName);
+
+            Button start = new Button
+            {
+                Name = "start",
+                Text = "Start",
+                Location = new Point(200, 70),
+                Size = new Size(80, 30)
+            };
+            start.Click += (s, e) => gameStartBtnClick();
+            menu.Controls.Add(start);
+
+            Button exit = new Button
+            {
+                Name = "exit",
+                Text = "Exit",
+                Location = new Point(200, 170),
+                Size = new Size(80, 30)
+            };
+            exit.Click += (s, e) => this.Close();
+            menu.Controls.Add(exit);
+
+            Label score = new Label
+            {
+                Name = "score",
+                Text = "score: 0",
+                Location = new Point(50, 20),
+                Size = new Size(200, 30)
+            };
+            menu.Controls.Add(score);
+
+            Label heightScore = new Label
+            {
+                Name = "heightScore",
+                Text = "Height score: 0",
+                Location = new Point(50, 60),
+                Size = new Size(200, 30)
+            };
+            menu.Controls.Add(heightScore);
+
+            UpdateLoginUI();
+        }
+
+        private void UpdateLoginUI()
+        {
+            var loginBtn = this.Controls.Find("loginLogout", true).FirstOrDefault() as Button;
+            var gameLabel = this.Controls.Find("gameLabel", true).FirstOrDefault() as Label;
+
+            if (userManager.IsLoggedIn)
+            {
+                loginBtn.Text = $"Logout ({userManager.CurrentUserName})";
+                gameLabel.Text = userManager.CurrentUserName;
+            }
+            else
+            {
+                loginBtn.Text = "Login";
+                gameLabel.Text = "Temporary name";
+            }
+
+            if (userManager.IsLoggedIn)
+            {
+                var last = scoreManager.GetLastScore(userManager.CurrentUserName);
+                var high = scoreManager.GetHighScore(userManager.CurrentUserName);
+                var scoreLabel = this.Controls.Find("score", true).FirstOrDefault() as Label;
+                var highLabel = this.Controls.Find("heightScore", true).FirstOrDefault() as Label;
+                if (scoreLabel != null) scoreLabel.Text = "score: " + last;
+                if (highLabel != null) highLabel.Text = "Height score: " + high;
+            }
+        }
+
+        public void loginLogoutBtnClick()
+        {
+            if (!userManager.IsLoggedIn)
+            {
+                Form2 frm = new Form2(userManager);
+                frm.ShowDialog();
+
+                if (userManager.IsLoggedIn)
+                {
+                    UpdateLoginUI();
+                    UpdateLoginUI();
+                }
+            }
+            else
+            {
+                userManager.Logout();
+                UpdateLoginUI();
+            }
+        }
+
+        public void gameStartBtnClick()
+        {
+            if (!userManager.IsLoggedIn)
+            {
+                MessageBox.Show("You are not logged in! Please log in to play.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Form3 gameForm = new Form3(userManager.CurrentUserName, userManager, scoreManager);
+            gameForm.Show();
+            this.Hide();
+            gameForm.FormClosed += (s, e) =>
+            {
+                this.Show();
+                UpdateLoginUI();
+            };
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (userManager.IsLoggedIn)
+                {
+                    scoreManager.SyncToDatabaseForUser(userManager.CurrentUserName, userManager.CurrentUserId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error while saving scores to DB: " + ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Size = new Size(1000, 800);
+            this.Text = "Start panel";
+        }
+    }
+}

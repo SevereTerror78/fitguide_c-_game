@@ -1,0 +1,116 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace game
+{
+    public abstract class PowerDownBase
+    {
+        protected Form3 form;
+        protected Button button;
+        protected Timer lifeTimer;
+        protected Random rnd = new Random();
+
+        public bool Active { get; private set; } = false;
+
+        public PowerDownBase(Form3 form)
+        {
+            this.form = form ?? throw new ArgumentNullException(nameof(form));
+
+            button = new Button();
+            button.Size = new Size(60, 40);
+            button.BackColor = Color.DarkRed;
+            button.ForeColor = Color.White;
+            button.Visible = false;
+            form.Controls.Add(button);
+            button.BringToFront();
+        }
+
+        public virtual void Spawn()
+        {
+            if (Active) return;
+            Active = true;
+
+            PlaceRandomly();
+
+            if (button != null)
+                button.Visible = true;
+
+            lifeTimer = new Timer();
+            lifeTimer.Interval = rnd.Next(10000, 15000);
+            lifeTimer.Tick += (s, e) => Destroy();
+            lifeTimer.Start();
+        }
+
+        private void PlaceRandomly()
+        {
+            int x, y;
+
+            do
+            {
+                x = rnd.Next(0, form.ClientSize.Width - button.Width);
+                y = rnd.Next(0, form.ClientSize.Height - button.Height);
+            }
+            while (new Rectangle(x, y, button.Width, button.Height).IntersectsWith(form.PlayerBounds));
+
+            button.Left = x;
+            button.Top = y;
+        }
+
+        public void CheckBulletCollision(Panel bullet, Timer bulletTimer)
+        {
+            if (!Active) return;
+            if (button == null || bullet == null) return;
+
+            if (bullet.Bounds.IntersectsWith(button.Bounds))
+            {
+                OnHit();
+                Destroy();
+
+                if (bulletTimer != null)
+                {
+                    bulletTimer.Stop();
+                    bulletTimer.Dispose();
+                }
+
+                if (bullet != null)
+                {
+                    bullet.Visible = false;
+                    bullet.Dispose();
+                }
+            }
+        }
+
+
+        protected abstract void OnHit();
+
+        public void Destroy()
+        {
+            if (!Active) return;
+            Active = false;
+
+            if (lifeTimer != null)
+            {
+                lifeTimer.Stop();
+                lifeTimer.Dispose();
+                lifeTimer = null;
+            }
+
+            if (button != null)
+            {
+                try
+                {
+                    form.Controls.Remove(button);
+                }
+                catch { }
+                button.Visible = false;
+                button.Dispose();
+                button = null;
+            }
+        }
+    }
+}

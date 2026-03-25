@@ -1,0 +1,29 @@
+﻿using NUnit.Framework;
+using game;
+using System.Threading;
+using System.Windows.Forms;
+using System.Drawing;
+
+namespace Game.Tests
+{
+    [TestFixture]
+    public class PowerItemTests
+    {
+        private class DummyForm : Form { }
+
+        [Test]
+        public void PowerUpScore_IncreasesScore()
+        {
+            var f = new DummyForm();
+            var engine = new GameEngine(f);
+            f.CreateControl();
+            var pu = new PowerUpScore((Form3)System.Activator.CreateInstance(typeof(Form3), new object[] { "a", new UserManager(), new ScoreManager() }));
+
+            // simulate hit
+            int before = pu.form.Engine.GetElapsedTime();
+            pu.form.Engine.SetElapsedTime(10);
+            pu.OnHit();
+            Assert.AreEqual(20, pu.form.Engine.GetElapsedTime());
+        }
+    }
+}

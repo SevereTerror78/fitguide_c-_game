@@ -1,0 +1,266 @@
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System.Xml.Linq;
+using System.Net.Mail;
+
+
+namespace game
+{
+    public partial class Form2 : Form
+    {
+        /// <summary>
+        /// Login dialog used to authenticate users. Provides email and password fields
+        /// and optional ability to remember the last used email.
+        /// </summary>
+        private readonly UserManager userManager;
+        private TextBox emailBox;
+        private TextBox passwordBox;
+        private CheckBox rememberMeBox;
+
+        /// <summary>
+        /// Initializes the login dialog and its UI.
+        /// </summary>
+        /// <param name="userManager">User manager instance used to validate credentials.</param>
+        public Form2(UserManager userManager)
+        {
+            InitializeComponent();
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
+            // base form styling
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Size = new Size(600, 400);
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            this.ForeColor = Color.White;
+            this.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+
+            InitLayout();
+            this.Load += Form2_Load;
+        }
+
+        /// <summary>
+        /// Form load handler; loads remembered email if present and recenters the login box.
+        /// </summary>
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            this.Text = "Login";
+
+            var last = userManager.LoadLastEmail();
+            if (!string.IsNullOrWhiteSpace(last))
+            {
+                emailBox.Text = last;
+                passwordBox.Focus();
+            }
+
+            // center the login box
+            var loginBox = this.Controls.Find("login", true).FirstOrDefault() as GroupBox;
+            if (loginBox != null)
+            {
+                loginBox.Left = (this.ClientSize.Width - loginBox.Width) / 2;
+                loginBox.Top = (this.ClientSize.Height - loginBox.Height) / 2;
+            }
+        }
+
+        /// <summary>
+        /// Builds the login UI: labels, textboxes, remember checkbox and buttons.
+        /// </summary>
+        private void InitLayout()
+        {
+            GroupBox loginBox = new GroupBox
+            {
+                Name = "login",
+                Text = "",
+                Size = new Size(420, 260),
+                BackColor = Color.FromArgb(40, 60, 90),
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F, FontStyle.Regular)
+            };
+            this.Controls.Add(loginBox);
+
+            Label title = new Label
+            {
+                Text = "Login",
+                Location = new Point(20, 10),
+                Size = new Size(380, 40),
+                Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            loginBox.Controls.Add(title);
+
+            int startY = 60;
+            int labelWidth = 80;
+            int textBoxWidth = 260;
+            int height = 30;
+            int spacing = 45;
+
+            Label emailLabel = new Label
+            {
+                Text = "Email:",
+                Location = new Point(20, startY),
+                Size = new Size(labelWidth, height),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+            loginBox.Controls.Add(emailLabel);
+
+            emailBox = new TextBox
+            {
+                Name = "email",
+                Location = new Point(20 + labelWidth + 10, startY),
+                Size = new Size(textBoxWidth, height),
+                BackColor = Color.White,
+                ForeColor = Color.Black
+            };
+            // Press Enter in email -> focus password
+            emailBox.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    passwordBox.Focus();
+                    passwordBox.SelectAll();
+                }
+            };
+            loginBox.Controls.Add(emailBox);
+
+            Label passwordLabel = new Label
+            {
+                Text = "Password:",
+                Location = new Point(20, startY + spacing),
+                Size = new Size(labelWidth, height),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+            loginBox.Controls.Add(passwordLabel);
+
+            passwordBox = new TextBox
+            {
+                Name = "password",
+                UseSystemPasswordChar = true,
+                Location = new Point(20 + labelWidth + 10, startY + spacing),
+                Size = new Size(textBoxWidth, height),
+                BackColor = Color.White,
+                ForeColor = Color.Black
+            };
+            // Press Enter in password -> attempt login
+            passwordBox.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    DoLogin();
+                }
+            };
+            loginBox.Controls.Add(passwordBox);
+
+            rememberMeBox = new CheckBox
+            {
+                Text = "Remember email",
+                Location = new Point(20 + labelWidth + 10, startY + spacing * 2 - 10),
+                Size = new Size(160, 24),
+                BackColor = Color.Transparent,
+                ForeColor = Color.White
+            };
+            loginBox.Controls.Add(rememberMeBox);
+
+            Button loginButton = new Button
+            {
+                Name = "loginButton",
+                Text = "Login",
+                Size = new Size(160, 40),
+                Location = new Point(20 + labelWidth + 10, startY + spacing * 2 + 10),
+                BackColor = Color.FromArgb(70, 130, 180),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold)
+            };
+            loginButton.FlatAppearance.BorderSize = 0;
+            loginButton.Click += (s, e) => DoLogin();
+            loginBox.Controls.Add(loginButton);
+
+            LinkLabel registerLink = new LinkLabel
+            {
+                Text = "Don't have an account? Register",
+                Location = new Point(20, startY + spacing * 2 + 18),
+                Size = new Size(260, 24),
+                LinkColor = Color.LightBlue,
+                BackColor = Color.Transparent
+            };
+            registerLink.Click += (s, e) => MessageBox.Show("Registration is not implemented in this UI.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            loginBox.Controls.Add(registerLink);
+
+            Button cancelButton = new Button
+            {
+                Text = "Back",
+                Size = new Size(80, 34),
+                Location = new Point(loginBox.Width - 100, loginBox.Height - 50),
+                BackColor = Color.FromArgb(200, 60, 60),
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+            };
+            cancelButton.FlatAppearance.BorderSize = 0;
+            cancelButton.Click += (s, e) => this.Close();
+            loginBox.Controls.Add(cancelButton);
+        }
+
+        /// <summary>
+        /// Attempts to sign in using entered credentials. Validates email syntax and shows
+        /// friendly error messages and focuses the control that caused the error.
+        /// </summary>
+        private void DoLogin()
+        {
+            string email = emailBox.Text.Trim();
+            string pwd = passwordBox.Text;
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pwd))
+            {
+                MessageBox.Show("You didn't fill everything!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // basic email syntax validation
+            try
+            {
+                var _ = new MailAddress(email);
+            }
+            catch
+            {
+                MessageBox.Show("The email is invalid or does not match", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                emailBox.Focus();
+                emailBox.SelectAll();
+                return;
+            }
+
+            if (userManager.TryLogin(email, pwd, out string failMsg))
+            {
+                // save last email preference
+                if (rememberMeBox.Checked)
+                    userManager.SaveLastEmail(email);
+
+                MessageBox.Show($"Login successful! Welcome {userManager.CurrentUserName}");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            {
+                // show focused, user-friendly messages
+                if (!string.IsNullOrEmpty(failMsg) && failMsg.IndexOf("password", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    MessageBox.Show("Incorrect password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    passwordBox.Focus();
+                    passwordBox.SelectAll();
+                }
+                else
+                {
+                    MessageBox.Show("The email is invalid or does not match", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    emailBox.Focus();
+                    emailBox.SelectAll();
+                }
+            }
+        }
+    }
+}
