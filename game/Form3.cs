@@ -34,6 +34,7 @@ namespace game
         // factories for different item types
         private List<Func<Form3, PowerDownBase>> powerDownFactories = new List<Func<Form3, PowerDownBase>>();
         private List<Func<Form3, PowerDownBase>> powerUpFactories = new List<Func<Form3, PowerDownBase>>();
+        private bool gameEndedFlag = false;
 
         /// <summary>
         /// Constructs the game form, initializes UI and game engine, registers power item factories
@@ -81,7 +82,12 @@ namespace game
                         this.Invoke((MethodInvoker)delegate
                         {
                             Rectangle bounds = new Rectangle(this.Left, this.Top, this.Width, this.Height);
-                            bool ended = engine.ShrinkFrame(ref bounds);
+                            bool ended = false;
+
+                            // Only shrink the frame when the engine is not paused
+                            try { if (!engine.IsPaused) ended = engine.ShrinkFrame(ref bounds); }
+                            catch { }
+
                             if (!ended)
                             {
                                 this.Width = bounds.Width;
@@ -300,6 +306,9 @@ namespace game
         /// </summary>
         private void Engine_OnGameEnded()
         {
+            // mark game ended so other UI (pause dialog) won't appear
+            gameEndedFlag = true;
+
             this.Invoke((MethodInvoker)(() =>
             {
                 int finalScore = engine.GetElapsedTime();
@@ -352,6 +361,31 @@ namespace game
             powerItems.Clear();
             try { barrelTimer?.Stop(); barrelTimer?.Dispose(); } catch { }
             base.OnFormClosing(e);
+        }
+
+        /// <summary>
+        /// When the form loses focus, pause the game and show a modal dialog asking
+        /// the user to continue. Resume after the user confirms.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnDeactivate(EventArgs e)
+        {
+            base.OnDeactivate(e);
+            try
+            {
+                if (gameEndedFlag) return;
+                // pause engine
+                engine?.Pause();
+
+                if (this.IsDisposed || !this.IsHandleCreated) return;
+
+                // show modal dialog asking to continue
+                MessageBox.Show(this, "The game is paused because the window lost focus. Click OK to continue.", "Game paused", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // resume engine when user acknowledges
+                engine?.Resume();
+            }
+            catch { }
         }
 
         /// <summary>

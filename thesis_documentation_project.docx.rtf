@@ -1,0 +1,137 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}{\f1 Courier New;}}
+{\colortbl ;\red0\green0\blue0;}
+\margl567\margr567\margt567\margb567
+\fs24\f0\b Szakdolgozat - "FitGuide" Demo Game (Projekt-specifikus dokumentáció)\b0\par
+\par
+\fs20\f0\b Külső borítólap (kitöltendő)\b0\par
+Egyetem / Kar / Intézet: ___________________________\par
+Szak: ___________________________\par
+Téma: WinForms játék - FitGuide demonstrációs játék\par
+Készít?k: __________________ (Neptun: ______)\par
+Konzulens: __________________\par
+Leadás dátuma: YYYY.MM.DD\par
+\page
+\fs18\f0\b Belső borítólap (kitöltendő)\b0\par
+(A bels? borítólapon szerepeljen az összes, a küls? borítólapon megtalálható adat + elérhet?ségek)
+\page
+\fs18\f0\b Hallgatói nyilatkozat\b0\par
+(Mellékelt sablon szerint, kinyomtatva aláírva.)\par
+Aláírás: _______________________ Dátum: ____________\par
+\page
+\fs18\f0\b Konzultációs lap\b0\par
+Konzultációk dátumai, rövid megjegyzés, konzulens aláírása:\par
+- Dátum: ______ ; Téma: ______ ; Konzulens aláírás: ______\par
+\page
+\fs20\f0\b Tartalomjegyzék\b0\par
+(Word-ben automatikusan generálandó; a dokumentumban szerepl? fejezetek a következ?k.)\par
+\page
+\fs22\f0\b 1. Témaválasztás\b0\par
+1.1 Téma leírása és indoklása\par
+- Téma: WinForms alapú játék fejlesztése (C#/.NET Framework) — a projekt célja demonstrálni játéklogika, UI események és alapvet? perzisztencia megvalósítását.
+- Indoklás: Gyakorlati tapasztalat megszerzése .NET WinForms fejlesztésben és egyszer? backend integráció (pontszám-szinkron).
+\par
+1.2 Készít?k és feladatmegosztás (projekt specifikus)\par
+- Készít?: [Add meg a nevet] — Fejleszt?i részek (Form3, játéklogika, OverlayControl, Power-up/Power-down implementációk).
+- Készít?: [Add meg a nevet] — Backend interfész (DatabaseHelper), ScoreManager, UserManager, tesztek és dokumentáció.
+(Minden fejezetnél jelöld, hogy ki készítette az adott részt.)\par
+\page
+\fs22\f0\b 2. Fejleszt?i dokumentáció\b0\par
+\b2.1 Alkalmazás rövid ismertetése\b0\par
+A projekt egy egyszer? WinForms alapú játékprojekt (projekt mappa: `game`). A játék mechanikája: a játéktér id?vel zsugorodik (`GameEngine.ShrinkFrame`), a játékos középen van (`playerBtn` Form3-on), lövedékek mozognak és ütköznek power-itemekkel; pontok lokálisan ment?dnek (`ScoreManager`) és opcionálisan szinkronizálhatók adatbázissal (`DatabaseHelper`).\par
+\par
+\b2.2 Fejleszt?i környezet\b0\par
+- Fejleszt?szoftver: Microsoft Visual Studio Community 2026 (verzió: 18.4.3)\par
+- Nyelv: C# 7.3; Target: .NET Framework 4.7.2\par
+- F? projekthely: `D:\xampp\htdocs\vizsgaremeke\game`\par
+- NuGet csomagok a projektben: `MySql.Data`, `BCrypt.Net`, `NUnit` (tesztek).\par
+\par
+\b2.3 Adatszerkezet (projekt-specifikus)\b0\par
+A projekt jelenleg a `DatabaseHelper` osztályon keresztül kommunikál adatbázissal. Ha közvetlen MySQL táblákat használtok, javasolt séma (példa):\par
+- `users` (Id INT PK, Email VARCHAR, Name VARCHAR, PasswordHash VARCHAR, CreatedAt DATETIME)\par
+- `scores` (Id INT PK, UserId INT FK -> users.Id, LastScore INT, HighScore INT, UpdatedAt DATETIME)\par
+- `discounts` (Id INT PK, UserId INT, Coupon VARCHAR, ExpiryDate DATE, Amount DECIMAL)
+\par
+Megjegyzés: a jelenlegi implementáció a `ScoreManager` osztályban lokális fájlokat használ (username_scores.txt) a pontok tárolására; `SyncToDatabaseForUser` a `DatabaseHelper.UpsertGameScores`-t hívja a szinkronhoz.
+\par
+\b2.4 Használati esetmodell, szerepkörök (projekt-specifikus)\b0\par
+Szerepkörök:
+- Felhasználó (Player): bejelentkezik (Form2), elindítja a játékot (Form1 -> Form3), játszik, pontjai ment?dnek.
+- Rendszergazda (opcionális): adatbázis-kezelés a szerver oldalon.
+\par
+F? Use cases:
+- UC1: Bejelentkezés (`Form2`, `UserManager.TryLogin`)
+- UC2: Játék indítása (`Form1.gameStartBtnClick`, `Form3` létrehozása)
+- UC3: Játékmenet és lövés (`GameEngine.OnShootBullet`, `Form3.Engine_OnShootBullet`)
+- UC4: Pont mentés (`ScoreManager.AppendScore` és `SyncToDatabaseForUser`)
+- UC5: Pause on focus loss (`Form3.OnDeactivate` hívja `GameEngine.Pause` és `Resume`).
+\par
+\b2.5 Osztályok, modulok, menüpontok ismertetése (projekt fájlok alapján)0\par
+(Összefoglaló, minden elem a `game` mappában található.)\par
+- `Form1.cs` — Main menu: `buttonsCreate()` (menu panel), `gameStartBtnClick()`, `loginLogoutBtnClick()`, centering logic (`Form1_Resize`).\par
+- `Form2.cs` — Login dialog: UI létrehozás (`InitLayout()`), email validation, `UserManager` használata, remember email.\par
+- `Form3.cs` — Game window: `InitUI()`, `playerBtn`, `timerLabel`, overlay (`OverlayControl`), `StartBulletMovement`, bullet impact handling, power item spawner (`StartPowerItemSpawner`). Implements pause on deactivate.
+- `GameEngine.cs` — engine: timers for elapsed time and shoot events, `Start`, `Pause`, `Resume`, `Stop`, `ShrinkFrame`, events: `OnElapsedTimeChanged`, `OnShootBullet`, `OnGameEnded`.
+- `OverlayControl.cs` — transparent control draws fixed-length barrel following cursor; click-through.
+- `PowerDownBase.cs`, `PowerDownSlow.cs`, `PowerDownKill.cs`, `PowerUpScore.cs`, `PowerUpBig.cs` — implementations of power items; `Spawn()`, `OnHit()`, collision checks.
+- `UserManager.cs` — authentication logic, `TryLogin`, `LoadLastEmail`, `SaveLastEmail` (local file). Uses `DatabaseHelper.GetUserByEmail` for DB lookup.
+- `ScoreManager.cs` — (current file) local score persistence: `AppendScore`, `ReadAllScores`, `GetHighScore`, `GetLastScore`, `SyncToDatabaseForUser` calls `DatabaseHelper.UpsertGameScores`.
+- `DatabaseHelper.cs` — helper functions for DB access (project-specific implementation depends on server or direct DB).\par
+\b2.6 Tesztelés, tesztesetek (projekt-specifikus)\b0\par
+- Unit tests (NUnit) található a `tests\Game.Tests` mappában. Futtatás: `dotnet test tests\Game.Tests\Game.Tests.csproj`.
+- Kézi tesztek: bejelentkezés, Start, power-up eltalálása (pontnövekedés), fókuszvesztés pause, kilépés és SyncToDatabaseForUser működése.
+\par
+\b2.7 Továbbfejlesztési lehet?ségek (projekt-specifikus javaslatok)\b0\par
+- Átállás szerver-API-ra (HTTPS REST) a `ScoreManager.SyncToDatabaseForUser` helyett: `POST https://fitguide-demo.hu/api/scores`.
+- B?víteni power típusokkal és UI animációkkal.
+- Kód tisztítás, DI használata, egységtesztek kiterjesztése.
+\page
+\fs22\f0\b 3. Felhasználói dokumentáció (projekt-specifikus)\b0\par
+\b3.1 Rövid ismertetés\b0\par
+A játék célja: próbára tenni a reakcióid?t és pontot szerezni. Olyan felhasználók számára hasznos, akik demonstrálni szeretnék a projektet vagy kipróbálják a játékmenetet.\par
+\b3.2 Rendszerkövetelmények\b0\par
+- Windows 10 vagy újabb\par
+- .NET Framework 4.7.2 telepítve\par
+- Visual Studio nem kötelez? a futtatáshoz (csak futtatható exe szükséges)\par
+\b3.3 Alkalmazás telepítése, szükséges beállítások\b0\par
+- Github repo klónozása: `https://github.com/SevereTerror78/fitguide_c-_game`\par
+- Build Visual Studio-ban: Rebuild Solution
+- Konfiguráció: `DatabaseHelper` connection string vagy API base URL konfigurálása (ha szükséges).\par
+\b3.4 Alkalmazás használata\b0\par
+- Indítás: futtasd `bin\Debug\game.exe` vagy indítsd Visual Studio-ból.
+- F?menü: Login (Form2) -> Start indítja a játékablakot (Form3).
+- Játékmenet: mozgasd az egeret, l?j golyókkal, cél power itemek eltalálása.
+- Pause: ha a játékablak elveszti a fókuszt (pl. másik alkalmazásra kattintasz), a játék automatikusan megáll és megjelenik egy információs ablak; OK nyomásra folytatódik.
+- Kilépés: Form3 bezárásakor `ScoreManager.SyncToDatabaseForUser` meghívódik (ha be van jelentkezve a felhasználó).
+\page
+\fs22\f0\b 4. Irodalomjegyzék (projekt-specifikus források)\b0\par
+- Microsoft Docs - Windows Forms: https://docs.microsoft.com (letöltés: YYYY-MM-DD)\par
+- BCrypt.Net: https://github.com/BcryptNet/bcrypt.net (letöltés: YYYY-MM-DD)\par
+- MySQL Connector/NET: https://dev.mysql.com/downloads/connector/net/ (letöltés: YYYY-MM-DD)\par
+- NUnit: https://nunit.org/ (letöltés: YYYY-MM-DD)\par
+\page
+\fs22\f0\b 5. Mellékletek (projekt-specifikus)\b0\par
+5.1 GitHub repo (publikus)\par
+- https://github.com/SevereTerror78/fitguide_c-_game\par
+5.2 Források a repo-ban\par
+- `game\` - alkalmazás forrásai (Form1.cs, Form2.cs, Form3.cs, GameEngine.cs, ScoreManager.cs, UserManager.cs, DatabaseHelper.cs, Power* osztályok, OverlayControl.cs)
+- `tests\` - unit tesztek (NUnit)
+5.3 SQL dumpok (helyi vagy repo/dump mappa)
+- dump/empty_schema.sql (üres séma)\par
+- dump/sample_data.sql (teszt felhasználók és pontok)
+5.4 Teszt belépési adatok (példa)
+- user1@example.com / Test123!\par
+- user2@example.com / Passw0rd!\par
+\page
+\fs18\f0\b Ellen?rzo lista a leadáshoz (projekt-specifikus)\b0\par
+- [ ] Küls? borítólap a minta szerint\par
+- [ ] Bels? borítólap\par
+- [ ] Hallgatói nyilatkozat (aláírva)\par
+- [ ] Konzultációs lap\par
+- [ ] Dokumentáció fájlok (Word és PDF)\par
+- [ ] GitHub repo: források feltöltve\par
+- [ ] SQL dumpok a repo-ban vagy csatolva\par
+\par
+\fs16 Készít?k: _____________________\par
+Konzulens: _____________________\par
+}

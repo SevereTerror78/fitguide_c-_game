@@ -1,0 +1,493 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static game.GameEngine;
+
+namespace game
+{
+    public partial class Form3 : Form
+    {
+        private readonly string username;
+        private readonly UserManager userManager;
+        private readonly ScoreManager scoreManager;
+        private readonly GameEngine engine;
+
+        private Button playerBtn;
+        private Label timerLabel;
+        private System.Windows.Forms.Timer barrelTimer;
+        private PointF barrelTarget = new PointF(0, 0);
+        private float barrelLength = 100f; // fixed barrel length in pixels
+        // support multiple power items (ups and downs)
+        private List<PowerDownBase> powerItems = new List<PowerDownBase>();
+        private System.Windows.Forms.Timer powerItemSpawner;
+        private Random rnd = new Random();
+        private const int MaxSimultaneousPowerItems = 3;
+        private readonly int spawnScoreThreshold = 0; // lowered threshold so +10 can appear earlier
+
+        // factories for different item types
+        private List<Func<Form3, PowerDownBase>> powerDownFactories = new List<Func<Form3, PowerDownBase>>();
+        private List<Func<Form3, PowerDownBase>> powerUpFactories = new List<Func<Form3, PowerDownBase>>();
+        private bool gameEndedFlag = false;
+
+        /// <summary>
+        /// Constructs the game form, initializes UI and game engine, registers power item factories
+        /// and starts the power item spawner and background UI update task.
+        /// </summary>
+        /// <param name="username">Player username to display/save scores for.</param>
+        /// <param name="userManager">User manager instance for account operations.</param>
+        /// <param name="scoreManager">Score manager instance for persisting scores.</param>
+        public Form3(string username, UserManager userManager, ScoreManager scoreManager)
+        {
+            InitializeComponent();
+
+            this.username = username ?? "anonymous";
+            this.userManager = userManager;
+            this.scoreManager = scoreManager;
+
+            InitUI();
+
+            engine = new GameEngine(this);
+            engine.OnElapsedTimeChanged += Engine_OnElapsedTimeChanged;
+            engine.OnShootBullet += Engine_OnShootBullet;
+            engine.OnGameEnded += Engine_OnGameEnded;
+
+            engine.Start();
+
+            // register available item types — add here as you implement new ones
+            powerDownFactories.Add(f => new PowerDownScore(f));
+            powerDownFactories.Add(f => new PowerDownSlow(f));
+            powerDownFactories.Add(f => new PowerDownKill(f));
+
+            powerUpFactories.Add(f => new PowerUpScore(f));
+            powerUpFactories.Add(f => new PowerUpBig(f));
+
+            // initial power items list is empty; spawner will create instances
+            StartPowerItemSpawner();
+
+            Task.Run(() =>
+            {
+                Thread.Sleep(200);
+                while (true)
+                {
+                    if (this.IsDisposed) break;
+                    try
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            Rectangle bounds = new Rectangle(this.Left, this.Top, this.Width, this.Height);
+                            bool ended = false;
+
+                            // Only shrink the frame when the engine is not paused
+                            try { if (!engine.IsPaused) ended = engine.ShrinkFrame(ref bounds); }
+                            catch { }
+
+                            if (!ended)
+                            {
+                                this.Width = bounds.Width;
+                                this.Height = bounds.Height;
+                                this.Left = bounds.Left;
+                                this.Top = bounds.Top;
+
+                                playerBtn.Location = new Point(this.ClientSize.Width / 2 - playerBtn.Width / 2,
+                                                               this.ClientSize.Height / 2 - playerBtn.Height / 2);
+                            }
+                        });
+                    }
+                    catch { break; }
+
+                    Thread.Sleep(25);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Initialize the main UI elements for the game form (player button, timer label)
+        /// and set basic form properties (size, cursor).
+        /// </summary>
+        private void InitUI()
+        {
+            this.AutoSize = false;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.Size = new Size(1000, 1000);
+
+            // use crosshair cursor while playing
+            try { this.Cursor = Cursors.Cross; } catch { }
+
+            playerBtn = new Button { Width = 55, Height = 55 };
+            // center initial location
+            playerBtn.Location = new Point(this.Width / 2 - playerBtn.Width / 2, this.Height / 2 - playerBtn.Height / 2);
+            this.Controls.Add(playerBtn);
+            // add transparent overlay control to draw barrel above everything without intercepting clicks
+            try
+            {
+                var overlay = new OverlayControl(playerBtn) { BarrelLength = barrelLength };
+                this.Controls.Add(overlay);
+                overlay.BringToFront();
+            }
+            catch { }
+
+            timerLabel = new Label { Text = "0", Width = 100, Height = 50, Location = new Point(10, 10), Anchor = AnchorStyles.Top | AnchorStyles.Left };
+            this.Controls.Add(timerLabel);
+
+            // enable double buffering for smooth barrel rendering
+            try
+            {
+                this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+                this.UpdateStyles();
+            }
+            catch { }
+
+            // start a small timer to track cursor and repaint barrel (works even when mouse over child controls)
+            barrelTarget = new PointF(this.ClientSize.Width / 2f, this.ClientSize.Height / 2f);
+            barrelTimer = new System.Windows.Forms.Timer();
+            barrelTimer.Interval = 15;
+            barrelTimer.Tick += (s, e) =>
+            {
+                try
+                {
+                    var p = this.PointToClient(Cursor.Position);
+                    barrelTarget = new PointF(p.X, p.Y);
+                    this.Invalidate();
+                }
+                catch { }
+            };
+            barrelTimer.Start();
+        }
+
+        /// <summary>
+        /// Gets the player's current bounds on the form.
+        /// </summary>
+        public Rectangle PlayerBounds => playerBtn.Bounds;
+
+        /// <summary>
+        /// Gets the active GameEngine instance for this form.
+        /// </summary>
+        public GameEngine Engine => engine;
+
+        /// <summary>
+        /// Handler called by the game engine when elapsed time (score) changes.
+        /// Updates the on-screen timer label.
+        /// </summary>
+        /// <param name="seconds">New elapsed time in seconds.</param>
+        private void Engine_OnElapsedTimeChanged(int seconds)
+        {
+            if (!this.IsDisposed)
+                this.Invoke((MethodInvoker)(() => timerLabel.Text = seconds.ToString()));
+        }
+
+        /// <summary>
+        /// Handler called by the game engine when the player shoots a bullet.
+        /// Creates a bullet UI panel and starts its movement.
+        /// </summary>
+        /// <param name="center">The shooting origin point.</param>
+        /// <param name="mousePos">The target mouse position.</param>
+        private void Engine_OnShootBullet(Point center, Point mousePos)
+        {
+            this.Invoke((MethodInvoker)(() =>
+            {
+                Panel bullet = new Panel { Size = new Size(10, 10), BackColor = Color.Red, Location = new Point(center.X - 5, center.Y - 5) };
+                bullet.Tag = CalculateDirection(center, mousePos);
+                this.Controls.Add(bullet);
+                StartBulletMovement(bullet);
+            }));
+        }
+
+        /// <summary>
+        /// Starts movement for the given bullet panel. Handles bullet updates, collision
+        /// checks against power items and removal when leaving the play area.
+        /// </summary>
+        /// <param name="bullet">The bullet panel to animate.</param>
+        private void StartBulletMovement(Panel bullet)
+        {
+            System.Windows.Forms.Timer movementTimer = new System.Windows.Forms.Timer { Interval = 15 };
+            movementTimer.Tick += (s, e) =>
+            {
+                PointF dir = (PointF)bullet.Tag;
+                int speed = 10;
+                bullet.Left += (int)(dir.X * speed);
+                bullet.Top += (int)(dir.Y * speed);
+
+                // check collisions with all active power items
+                for (int i = powerItems.Count - 1; i >= 0; i--)
+                {
+                    var pd = powerItems[i];
+                    if (pd == null) { powerItems.RemoveAt(i); continue; }
+
+                    if (pd.Active)
+                    {
+                        pd.CheckBulletCollision(bullet, movementTimer);
+                        if (!bullet.Visible)
+                            break; // bullet consumed
+                    }
+                    else
+                    {
+                        // clean up finished power items
+                        powerItems.RemoveAt(i);
+                    }
+                }
+
+                if (!bullet.Visible) return;
+
+                if (bullet.Left <= 0 || bullet.Right >= this.ClientSize.Width || bullet.Top <= 0 || bullet.Bottom >= this.ClientSize.Height)
+                {
+                    movementTimer.Stop();
+                    movementTimer.Dispose();
+                    HandleBulletImpact(bullet);
+                }
+            };
+
+            movementTimer.Start();
+        }
+
+        /// <summary>
+        /// Calculates a normalized direction vector from start to target.
+        /// Returns a PointF representing the unit vector direction.
+        /// </summary>
+        /// <param name="start">Starting point.</param>
+        /// <param name="target">Target point.</param>
+        /// <returns>Normalized direction vector as PointF.</returns>
+        private PointF CalculateDirection(Point start, Point target)
+        {
+            float dx = target.X - start.X;
+            float dy = target.Y - start.Y;
+            float length = (float)Math.Sqrt(dx * dx + dy * dy);
+            if (length == 0) return new PointF(0, 0);
+            return new PointF(dx / length, dy / length);
+        }
+
+        /// <summary>
+        /// Handles the impact when a bullet hits the boundary of the play area.
+        /// Expands the window on the side that was hit and disposes the bullet.
+        /// </summary>
+        /// <param name="bullet">The bullet that impacted.</param>
+        private void HandleBulletImpact(Panel bullet)
+        {
+            bool hitLeft = bullet.Left <= 0;
+            bool hitRight = bullet.Right >= this.ClientSize.Width;
+            bool hitTop = bullet.Top <= 0;
+            bool hitBottom = bullet.Bottom >= this.ClientSize.Height;
+
+            int growAmount = 50;
+
+            if (hitLeft)
+            {
+                this.Left -= growAmount;
+                this.Width += growAmount;
+            }
+            else if (hitRight)
+            {
+                this.Width += growAmount;
+            }
+
+            if (hitTop)
+            {
+                this.Top -= growAmount;
+                this.Height += growAmount;
+            }
+            else if (hitBottom)
+            {
+                this.Height += growAmount;
+            }
+
+            bullet.Dispose();
+        }
+
+        /// <summary>
+        /// Handler called by the game engine when the game ends. Persists score,
+        /// possibly awards rewards and shows final messages, then closes the form.
+        /// </summary>
+        private void Engine_OnGameEnded()
+        {
+            this.Invoke((MethodInvoker)(() =>
+            {
+                int finalScore = engine.GetElapsedTime();
+                try
+                {
+                    scoreManager.AppendScore(username, finalScore);
+                }
+                catch { }
+
+                if (finalScore > 50)
+                {
+                    int userId = userManager.CurrentUserId;
+
+                    string coupon = CouponGenerator.Generate(12);
+
+                    DateTime expiry = DateTime.Now.AddDays(7);
+
+                    decimal amount = 15;
+
+                    DatabaseHelper.InsertDiscount(userId, coupon, expiry, amount);
+
+                    MessageBox.Show(
+                        $"Gratulálunk!\nNyertél egy kupont:\n\n{coupon}\n\nÉrvényes: {expiry:yyyy-MM-dd}",
+                        "Kupon nyertél!",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+
+                MessageBox.Show("The game has ended!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // cleanup power items and spawner
+                try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
+                foreach (var pd in powerItems) pd?.Destroy();
+                powerItems.Clear();
+
+                this.Close();
+            }));
+        }
+
+        /// <summary>
+        /// Form closing override to stop the engine and cleanup power items and timers.
+        /// </summary>
+        /// <param name="e">Form closing event args.</param>
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            engine?.Stop();
+            try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
+            foreach (var pd in powerItems) pd?.Destroy();
+            powerItems.Clear();
+            try { barrelTimer?.Stop(); barrelTimer?.Dispose(); } catch { }
+            base.OnFormClosing(e);
+        }
+
+        /// <summary>
+        /// When the form loses focus, pause the game and show a modal dialog asking
+        /// the user to continue. Resume after the user confirms.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnDeactivate(EventArgs e)
+        {
+            base.OnDeactivate(e);
+            try
+            {
+                // pause engine
+                engine?.Pause();
+
+                if (this.IsDisposed || !this.IsHandleCreated) return;
+
+                // show modal dialog asking to continue
+                MessageBox.Show(this, "The game is paused because the window lost focus. Click OK to continue.", "Game paused", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // resume engine when user acknowledges
+                engine?.Resume();
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Paint the barrel (a fixed-length gray line starting from the player center towards the cursor).
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            try
+            {
+                if (playerBtn != null && playerBtn.Visible && barrelTimer != null)
+                {
+                    var g = e.Graphics;
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                    float sx = playerBtn.Left + playerBtn.Width / 2f;
+                    float sy = playerBtn.Top + playerBtn.Height / 2f;
+
+                    float dx = barrelTarget.X - sx;
+                    float dy = barrelTarget.Y - sy;
+                    float len = (float)Math.Sqrt(dx * dx + dy * dy);
+                    if (len < 1) len = 1;
+                    float ex = sx + dx / len * barrelLength;
+                    float ey = sy + dy / len * barrelLength;
+
+                    using (var pen = new Pen(Color.Gray, 8))
+                    using (var penInner = new Pen(Color.DarkGray, 2))
+                    {
+                        pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+                        pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+                        penInner.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+                        penInner.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+                        g.DrawLine(pen, sx, sy, ex, ey);
+                        g.DrawLine(penInner, sx, sy, ex, ey);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Starts a timer that periodically attempts to spawn power items (ups/downs)
+        /// based on the current score, configured probabilities and dynamic caps.
+        /// </summary>
+        private void StartPowerItemSpawner()
+        {
+            powerItemSpawner = new System.Windows.Forms.Timer();
+            powerItemSpawner.Interval = 5000; 
+            powerItemSpawner.Tick += (s, e) =>
+            {
+                // remove any inactive entries
+                powerItems.RemoveAll(p => p == null || !p.Active);
+
+                // spawn conditions: score threshold and keep a cap to avoid overwhelming game
+                int score = engine.GetElapsedTime();
+                // dynamic cap increases with score
+                int dynamicCap = MaxSimultaneousPowerItems;
+                if (score >= 100) dynamicCap = Math.Max(dynamicCap, MaxSimultaneousPowerItems + 1);
+                if (score >= 200) dynamicCap = Math.Max(dynamicCap, MaxSimultaneousPowerItems + 2);
+
+                if (score >= spawnScoreThreshold && powerItems.Count < dynamicCap)
+                {
+                    // spawn chance increases as the player's score grows
+                    double baseChance = 0.6;
+                    double multiplier = 1.0;
+                    if (score >= 100) multiplier *= 2.0; // double chance at 100
+                    if (score >= 200) multiplier *= 2.0; // double again at 200 (total x4)
+
+                    double chance = Math.Min(1.0, baseChance * multiplier);
+
+                    // randomize whether to spawn this tick to keep gameplay varied
+                    if (rnd.NextDouble() < chance)
+                    {
+                        // determine UP/DOWN probabilities based on score
+                        double upProb;
+                        if (score < 100) upProb = 0.75; // under 100: 75% up
+                        else if (score < 200) upProb = 0.5; // 100-199: 50% up
+                        else upProb = 0.25; // 200+: 25% up
+
+                        bool spawnUp = rnd.NextDouble() < upProb;
+
+                        List<Func<Form3, PowerDownBase>> pool = spawnUp ? powerUpFactories : powerDownFactories;
+
+                        if (pool.Count > 0)
+                        {
+                            int idx = rnd.Next(0, pool.Count);
+                            var pd = pool[idx](this);
+                            pd.Spawn();
+                            powerItems.Add(pd);
+                        }
+                    }
+                }
+
+                powerItemSpawner.Interval = rnd.Next(5000, 12000);
+            };
+            powerItemSpawner.Start();
+        }
+
+        public void StartPowerDown_ShrinkRateUp() { }
+        public void StartPowerDown_ShootPowerDown() { }
+        public void StartPowerDown_KillNotMove() { }
+        public void StartPowerDown_KillWithMove() { }
+
+        public void StartPowerUp_ScoreUp() { }
+        public void StartPowerUp_ShrinkRateUp() { }
+        public void StartPowerUp_ShootPowerUp() { }
+    }
+}

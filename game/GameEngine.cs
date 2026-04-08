@@ -17,6 +17,7 @@ namespace game
         private System.Windows.Forms.Timer shootTimer;
         private readonly Random random = new Random();
         private bool ended = false;
+        private bool paused = false;
         private int elapsedTime = 0;
 
         /// <summary>
@@ -46,6 +47,44 @@ namespace game
             StartElapsedTimer();
             StartShootTimer();
         }
+
+        /// <summary>
+        /// Pauses the engine timers without ending the game. Elapsed time is preserved.
+        /// </summary>
+        public void Pause()
+        {
+            paused = true;
+            if (gameTimer != null)
+            {
+                gameTimer.Stop();
+                gameTimer.Dispose();
+                gameTimer = null;
+            }
+
+            if (shootTimer != null)
+            {
+                shootTimer.Stop();
+                shootTimer.Dispose();
+                shootTimer = null;
+            }
+        }
+
+        /// <summary>
+        /// Resumes the engine timers if the game hasn't ended.
+        /// </summary>
+        public void Resume()
+        {
+            paused = false;
+            if (ended) return;
+            // restart timers only if they are not running
+            if (gameTimer == null) StartElapsedTimer();
+            if (shootTimer == null) StartShootTimer();
+        }
+
+        /// <summary>
+        /// Indicates whether the engine is currently paused.
+        /// </summary>
+        public bool IsPaused => paused;
 
         public void Stop()
         {
