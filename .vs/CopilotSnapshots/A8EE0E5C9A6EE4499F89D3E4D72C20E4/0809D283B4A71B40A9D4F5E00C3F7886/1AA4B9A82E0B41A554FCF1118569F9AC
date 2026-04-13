@@ -1,0 +1,29 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace game
+{
+    /// <summary>
+    /// Power-down that subtracts 5 points when hit (placeholder for shrink-rate effect).
+    /// </summary>
+    public class PowerDownSlow : PowerDownBase
+    {
+        /// <summary>
+        /// Power-down that subtracts 5 points when hit (placeholder for shrink-rate effect).
+        /// </summary>
+        public PowerDownSlow(Form3 form) : base(form)
+        {
+            button.Text = "-5p";
+            try { button.BackColor = Color.OrangeRed; } catch { }
+        }
+
+        protected override void OnHit()
+        {
+            int score = form.Engine.GetElapsedTime();
+            int newScore = Math.Max(0, score - 5);
+            form.Engine.SetElapsedTime(newScore);
+            // silent effect; no popup
+        }
+    }
+}

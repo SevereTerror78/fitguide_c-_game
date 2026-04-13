@@ -19,6 +19,9 @@ namespace game
         private bool ended = false;
         private bool paused = false;
         private int elapsedTime = 0;
+        // multiplier to control frame shrink speed (1.0 = normal)
+        private double shrinkMultiplier = 1.0;
+        private readonly object shrinkLock = new object();
 
         /// <summary>
         /// Raised when elapsed time (score) changes. Subscribers receive the new seconds value.
@@ -135,8 +138,14 @@ namespace game
         {
             if (ended) return true;
 
-            int newWidth = currentBounds.Width - shrinkAmount;
-            int newHeight = currentBounds.Height - shrinkAmount;
+            int actualShrink = shrinkAmount;
+            lock (shrinkLock)
+            {
+                try { actualShrink = Math.Max(1, (int)Math.Round(shrinkAmount * shrinkMultiplier)); } catch { actualShrink = shrinkAmount; }
+            }
+
+            int newWidth = currentBounds.Width - actualShrink;
+            int newHeight = currentBounds.Height - actualShrink;
 
             if (newWidth <= minWidth || newHeight <= minHeight)
             {
@@ -154,6 +163,33 @@ namespace game
 
             currentBounds = new Rectangle(newLeft, newTop, newWidth, newHeight);
             return false;
+        }
+
+        /// <summary>
+        /// Temporarily adjusts the shrink multiplier for a duration (milliseconds).
+        /// Multiplier > 1.0 makes the frame shrink faster; multiplier &lt; 1.0 slows shrinking.
+        /// </summary>
+        public void ApplyShrinkMultiplier(double multiplier, int durationMs)
+        {
+            if (multiplier <= 0) return;
+            lock (shrinkLock)
+            {
+                shrinkMultiplier = multiplier;
+            }
+
+            // restore to 1.0 after duration
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await Task.Delay(durationMs);
+                }
+                catch { }
+                lock (shrinkLock)
+                {
+                    shrinkMultiplier = 1.0;
+                }
+            });
         }
 
         public int GetElapsedTime() => elapsedTime;

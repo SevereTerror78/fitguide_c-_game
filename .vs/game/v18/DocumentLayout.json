@@ -3,25 +3,6 @@
   "WorkspaceRootPath": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|d:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\form3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremek\\thesis_documentation.docx.rtf||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremeke\\game\\thesis_documentation_project.docx.rtf||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:thesis_documentation_project.docx.rtf||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\scoremanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\scoremanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\gameengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -30,12 +11,40 @@
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|d:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownslow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownslow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\FormTests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:tests\\Game.Tests\\FormTests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\databasehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\form3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\scoremanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\scoremanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerupscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,19 +59,8 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:tests\\Game.Tests\\PowerItemTests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\Game.Tests.csproj||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:tests\\Game.Tests\\Game.Tests.csproj||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\coupongenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\coupongenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremek\\presentation_script.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownscore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\GameEngineTests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -77,16 +75,8 @@
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownslow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownslow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownkill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownkill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\powerdownbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\powerdownbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
@@ -95,9 +85,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\overlaycontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{217702DA-1FB8-482E-AC3D-A08AF27DDA18}|game\\game.csproj|solutionrelative:game\\overlaycontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\xampp\\htdocs\\vizsgaremek\\presentation.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
     }
   ],
   "DocumentGroupContainers": [
@@ -107,266 +94,51 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "UserManager.cs",
               "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\UserManager.cs",
               "RelativeDocumentMoniker": "game\\UserManager.cs",
               "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\UserManager.cs",
               "RelativeToolTip": "game\\UserManager.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAwwGwAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAEwCwAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-30T14:17:24.095Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "thesis_documentation_project.docx.rtf",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\thesis_documentation_project.docx.rtf",
-              "RelativeDocumentMoniker": "thesis_documentation_project.docx.rtf",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\thesis_documentation_project.docx.rtf",
-              "RelativeToolTip": "thesis_documentation_project.docx.rtf",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIkAAAAAAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF9SURBVDhPzZVLSwJhFIYfJaggc1GQULjVra0KalurQiIJWtmiH1AMDCNpVzIh7A9IuWmlVNTKwFWuM9rVooVkINSmiS4iTIuaaW55o0UPHDjnO\u002B\u002B88833HRgH32xvbZzK8vOUWjdgIZ7YTZsXURTFoeaSKCjrm9tGgQ2r0Yia2po6zQvNEJyZBTiQRCFs7rVlGAgM/2raliF1TB2e\u002BbxiUP5CKT0OwPFRlqvipblNPLH7dR\u002Be\u002BbxSrVbrRiONJArappwA3vAF3vAFAJlCRcuXU7da3ixOdJ/z/Fpj7fAOgPvHd7KFCktBryaezLxYwkyHvkielJDfavC9U4DQ2AB7JyUAcqEevdwWg\u002BH\u002BeZnBvk7KTx\u002Bkcg\u002BM\u002BN0M9Xdp/cDGjV4OQDHmM9QGQ4Dkoo\u002B5nWvktxqhsQFDz/ywHQbDieE\u002BRv1uAFzdHRZDuwtSz1\u002Bj0Ui0OjYtD7Ydq9HIz2CrSKJgeXOzYRnsv\u002BT/G2oH2eIvwIDL1XsWWYlNA3wCUxk4tz1n8vYAAAAASUVORK5CYII=",
-              "WhenOpened": "2026-04-01T12:03:00.893Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "thesis_documentation.docx.rtf",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremek\\thesis_documentation.docx.rtf",
-              "RelativeDocumentMoniker": "..\\..\\vizsgaremek\\thesis_documentation.docx.rtf",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremek\\thesis_documentation.docx.rtf",
-              "RelativeToolTip": "..\\..\\vizsgaremek\\thesis_documentation.docx.rtf",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHwAAAAAAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF9SURBVDhPzZVLSwJhFIYfJaggc1GQULjVra0KalurQiIJWtmiH1AMDCNpVzIh7A9IuWmlVNTKwFWuM9rVooVkINSmiS4iTIuaaW55o0UPHDjnO\u002B\u002B88833HRgH32xvbZzK8vOUWjdgIZ7YTZsXURTFoeaSKCjrm9tGgQ2r0Yia2po6zQvNEJyZBTiQRCFs7rVlGAgM/2raliF1TB2e\u002BbxiUP5CKT0OwPFRlqvipblNPLH7dR\u002Be\u002BbxSrVbrRiONJArappwA3vAF3vAFAJlCRcuXU7da3ixOdJ/z/Fpj7fAOgPvHd7KFCktBryaezLxYwkyHvkielJDfavC9U4DQ2AB7JyUAcqEevdwWg\u002BH\u002BeZnBvk7KTx\u002Bkcg\u002BM\u002BN0M9Xdp/cDGjV4OQDHmM9QGQ4Dkoo\u002B5nWvktxqhsQFDz/ywHQbDieE\u002BRv1uAFzdHRZDuwtSz1\u002Bj0Ui0OjYtD7Ydq9HIz2CrSKJgeXOzYRnsv\u002BT/G2oH2eIvwIDL1XsWWYlNA3wCUxk4tz1n8vYAAAAASUVORK5CYII=",
-              "WhenOpened": "2026-04-01T11:57:42.826Z"
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Form3.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
-              "RelativeDocumentMoniker": "game\\Form3.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
-              "RelativeToolTip": "game\\Form3.cs",
-              "ViewState": "AgIAAHcBAAAAAAAAAABBwI8BAABSAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.097Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DatabaseHelper.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\DatabaseHelper.cs",
-              "RelativeDocumentMoniker": "game\\DatabaseHelper.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\DatabaseHelper.cs",
-              "RelativeToolTip": "game\\DatabaseHelper.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.095Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ScoreManager.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\ScoreManager.cs",
-              "RelativeDocumentMoniker": "game\\ScoreManager.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\ScoreManager.cs",
-              "RelativeToolTip": "game\\ScoreManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.095Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "PowerUpScore.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpScore.cs",
-              "RelativeDocumentMoniker": "game\\PowerUpScore.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpScore.cs",
-              "RelativeToolTip": "game\\PowerUpScore.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T12:14:10.882Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GameEngine.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\GameEngine.cs",
-              "RelativeDocumentMoniker": "game\\GameEngine.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\GameEngine.cs",
-              "RelativeToolTip": "game\\GameEngine.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAIBJwEMAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.097Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "PowerUpBig.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpBig.cs",
-              "RelativeDocumentMoniker": "game\\PowerUpBig.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpBig.cs",
-              "RelativeToolTip": "game\\PowerUpBig.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-21T15:59:39.42Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
               "Title": "Form1.cs",
               "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form1.cs",
               "RelativeDocumentMoniker": "game\\Form1.cs",
               "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form1.cs",
               "RelativeToolTip": "game\\Form1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsBAABGAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAABUAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.263Z"
+              "WhenOpened": "2025-12-30T14:17:24.263Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Form2.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
-              "RelativeDocumentMoniker": "game\\Form2.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
-              "RelativeToolTip": "game\\Form2.cs",
-              "ViewState": "AgIAAPgAAAAAAAAAAAAYwBIBAAABAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "GameEngine.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\GameEngine.cs",
+              "RelativeDocumentMoniker": "game\\GameEngine.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\GameEngine.cs",
+              "RelativeToolTip": "game\\GameEngine.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAgwB4AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.132Z"
+              "WhenOpened": "2025-12-30T14:17:24.097Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "PowerItemTests.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\PowerItemTests.cs",
-              "RelativeDocumentMoniker": "tests\\Game.Tests\\PowerItemTests.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\PowerItemTests.cs",
-              "RelativeToolTip": "tests\\Game.Tests\\PowerItemTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T11:31:31.879Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Game.Tests.csproj",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\Game.Tests.csproj",
-              "RelativeDocumentMoniker": "tests\\Game.Tests\\Game.Tests.csproj",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\Game.Tests.csproj",
-              "RelativeToolTip": "tests\\Game.Tests\\Game.Tests.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-26T11:31:10.24Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "CouponGenerator.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\CouponGenerator.cs",
-              "RelativeDocumentMoniker": "game\\CouponGenerator.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\CouponGenerator.cs",
-              "RelativeToolTip": "game\\CouponGenerator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.094Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "presentation_script.md",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremek\\presentation_script.md",
-              "RelativeDocumentMoniker": "..\\..\\vizsgaremek\\presentation_script.md",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremek\\presentation_script.md",
-              "RelativeToolTip": "..\\..\\vizsgaremek\\presentation_script.md",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2026-02-17T12:24:09.27Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "presentation.md",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremek\\presentation.md",
-              "RelativeDocumentMoniker": "..\\..\\vizsgaremek\\presentation.md",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremek\\presentation.md",
-              "RelativeToolTip": "..\\..\\vizsgaremek\\presentation.md",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAABsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2026-02-11T09:19:19.323Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "PowerDownScore.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownScore.cs",
-              "RelativeDocumentMoniker": "game\\PowerDownScore.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownScore.cs",
-              "RelativeToolTip": "game\\PowerDownScore.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.047Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "GameEngineTests.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\GameEngineTests.cs",
-              "RelativeDocumentMoniker": "tests\\Game.Tests\\GameEngineTests.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\GameEngineTests.cs",
-              "RelativeToolTip": "tests\\Game.Tests\\GameEngineTests.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T11:31:24.168Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "Form2.cs [Design]",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
-              "RelativeDocumentMoniker": "game\\Form2.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs [Design]",
-              "RelativeToolTip": "game\\Form2.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.262Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "OverlayControl.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\OverlayControl.cs",
-              "RelativeDocumentMoniker": "game\\OverlayControl.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\OverlayControl.cs",
-              "RelativeToolTip": "game\\OverlayControl.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-04T11:46:59.089Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "Form3.cs [Design]",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
-              "RelativeDocumentMoniker": "game\\Form3.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs [Design]",
-              "RelativeToolTip": "game\\Form3.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.098Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 3,
               "Title": "PowerDownSlow.cs",
               "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownSlow.cs",
               "RelativeDocumentMoniker": "game\\PowerDownSlow.cs",
@@ -378,7 +150,185 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PowerDownScore.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownScore.cs",
+              "RelativeDocumentMoniker": "game\\PowerDownScore.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownScore.cs",
+              "RelativeToolTip": "game\\PowerDownScore.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.047Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PowerDownBase.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownBase.cs",
+              "RelativeDocumentMoniker": "game\\PowerDownBase.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownBase.cs",
+              "RelativeToolTip": "game\\PowerDownBase.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAqwGsAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.093Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ScoreManager.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\ScoreManager.cs",
+              "RelativeDocumentMoniker": "game\\ScoreManager.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\ScoreManager.cs",
+              "RelativeToolTip": "game\\ScoreManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.095Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DatabaseHelper.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\DatabaseHelper.cs",
+              "RelativeDocumentMoniker": "game\\DatabaseHelper.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\DatabaseHelper.cs",
+              "RelativeToolTip": "game\\DatabaseHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.095Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Form3.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
+              "RelativeDocumentMoniker": "game\\Form3.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
+              "RelativeToolTip": "game\\Form3.cs",
+              "ViewState": "AgIAAHcBAAAAAAAAAABBwI8BAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.097Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "FormTests.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\FormTests.cs",
+              "RelativeDocumentMoniker": "tests\\Game.Tests\\FormTests.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\FormTests.cs",
+              "RelativeToolTip": "tests\\Game.Tests\\FormTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-09T15:54:14.741Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "PowerUpScore.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpScore.cs",
+              "RelativeDocumentMoniker": "game\\PowerUpScore.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpScore.cs",
+              "RelativeToolTip": "game\\PowerUpScore.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T12:14:10.882Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PowerUpBig.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpBig.cs",
+              "RelativeDocumentMoniker": "game\\PowerUpBig.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerUpBig.cs",
+              "RelativeToolTip": "game\\PowerUpBig.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-21T15:59:39.42Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Form2.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
+              "RelativeDocumentMoniker": "game\\Form2.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
+              "RelativeToolTip": "game\\Form2.cs",
+              "ViewState": "AgIAAPgAAAAAAAAAAAAYwBIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "PowerItemTests.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\PowerItemTests.cs",
+              "RelativeDocumentMoniker": "tests\\Game.Tests\\PowerItemTests.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\PowerItemTests.cs",
+              "RelativeToolTip": "tests\\Game.Tests\\PowerItemTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-26T11:31:31.879Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CouponGenerator.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\CouponGenerator.cs",
+              "RelativeDocumentMoniker": "game\\CouponGenerator.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\CouponGenerator.cs",
+              "RelativeToolTip": "game\\CouponGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.094Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "GameEngineTests.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\GameEngineTests.cs",
+              "RelativeDocumentMoniker": "tests\\Game.Tests\\GameEngineTests.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\tests\\Game.Tests\\GameEngineTests.cs",
+              "RelativeToolTip": "tests\\Game.Tests\\GameEngineTests.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-26T11:31:24.168Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Form2.cs [Design]",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs",
+              "RelativeDocumentMoniker": "game\\Form2.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form2.cs [Design]",
+              "RelativeToolTip": "game\\Form2.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.262Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 20,
+              "Title": "OverlayControl.cs",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\OverlayControl.cs",
+              "RelativeDocumentMoniker": "game\\OverlayControl.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\OverlayControl.cs",
+              "RelativeToolTip": "game\\OverlayControl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-04T11:46:59.089Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Form3.cs [Design]",
+              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs",
+              "RelativeDocumentMoniker": "game\\Form3.cs",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form3.cs [Design]",
+              "RelativeToolTip": "game\\Form3.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T14:17:24.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
               "Title": "PowerDownKill.cs",
               "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownKill.cs",
               "RelativeDocumentMoniker": "game\\PowerDownKill.cs",
@@ -390,26 +340,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "PowerDownBase.cs",
-              "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownBase.cs",
-              "RelativeDocumentMoniker": "game\\PowerDownBase.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\PowerDownBase.cs",
-              "RelativeToolTip": "game\\PowerDownBase.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAIBQwAsAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.093Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 19,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form1.cs",
               "RelativeDocumentMoniker": "game\\Form1.cs",
-              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremek-cgame\\game\\game\\Form1.cs [Design]",
-              "RelativeToolTip": "..\\..\\vizsgaremek-cgame\\game\\game\\Form1.cs [Design]",
+              "ToolTip": "D:\\xampp\\htdocs\\vizsgaremeke\\game\\game\\Form1.cs [Design]",
+              "RelativeToolTip": "game\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:17:24.264Z"
+              "WhenOpened": "2025-12-30T14:17:24.264Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }
