@@ -31,6 +31,9 @@ namespace game
         private const int MaxSimultaneousPowerItems = 3;
         private readonly int spawnScoreThreshold = 0; // lowered threshold so +10 can appear earlier
 
+        // when true, the form is being closed by user (close button / system menu)
+        private volatile bool isClosingByUser = false;
+
         // factories for different item types
         private List<Func<Form3, PowerDownBase>> powerDownFactories = new List<Func<Form3, PowerDownBase>>();
         private List<Func<Form3, PowerDownBase>> powerUpFactories = new List<Func<Form3, PowerDownBase>>();
@@ -355,12 +358,40 @@ namespace game
         /// <param name="e">Form closing event args.</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            // ensure we mark closing-by-user if the close reason indicates user action
+            try { if (e.CloseReason == CloseReason.UserClosing) isClosingByUser = true; } catch { }
+
             engine?.Stop();
             try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
             foreach (var pd in powerItems) pd?.Destroy();
             powerItems.Clear();
             try { barrelTimer?.Stop(); barrelTimer?.Dispose(); } catch { }
             base.OnFormClosing(e);
+        }
+
+        private const int WM_SYSCOMMAND = 0x0112;
+        private const int SC_CLOSE = 0xF060;
+
+        /// <summary>
+        /// Intercept close messages (clicking the X or Alt+F4) so we can detect user-initiated close
+        /// before Deactivate is fired and avoid showing the pause dialog.
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc(ref Message m)
+        {
+            try
+            {
+                if (m.Msg == WM_SYSCOMMAND)
+                {
+                    int wp = m.WParam.ToInt32() & 0xFFF0;
+                    if (wp == SC_CLOSE)
+                    {
+                        isClosingByUser = true;
+                    }
+                }
+            }
+            catch { }
+            base.WndProc(ref m);
         }
 
         /// <summary>
@@ -374,6 +405,7 @@ namespace game
             try
             {
                 if (gameEndedFlag) return;
+                if (isClosingByUser) return; // do not show pause dialog when user is closing the form
                 // pause engine
                 engine?.Pause();
 

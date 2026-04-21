@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = Game.Tests
-build_property.ProjectDir = D:\xampp\htdocs\vizsgaremek\game\tests\Game.Tests\
+build_property.ProjectDir = D:\xampp\htdocs\vizsgaremeke\game\tests\Game.Tests\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false
