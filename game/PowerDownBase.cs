@@ -48,7 +48,17 @@ namespace game
 
             lifeTimer = new Timer();
             lifeTimer.Interval = rnd.Next(10000, 15000);
-            lifeTimer.Tick += (s, e) => Destroy();
+            // Only destroy when the game is not paused. Use the host form's engine state to check.
+            lifeTimer.Tick += (s, e) =>
+            {
+                try
+                {
+                    if (form?.Engine != null && form.Engine.IsPaused)
+                        return;
+                }
+                catch { }
+                Destroy();
+            };
             lifeTimer.Start();
         }
 

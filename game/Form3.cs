@@ -466,9 +466,12 @@ namespace game
         private void StartPowerItemSpawner()
         {
             powerItemSpawner = new System.Windows.Forms.Timer();
-            powerItemSpawner.Interval = 5000; 
+            // make spawns more frequent and likely
+            powerItemSpawner.Interval = 3000;
             powerItemSpawner.Tick += (s, e) =>
             {
+                // do not spawn while the engine is paused or the game ended
+                try { if (engine.IsPaused || gameEndedFlag) return; } catch { }
                 // remove any inactive entries
                 powerItems.RemoveAll(p => p == null || !p.Active);
 
@@ -482,7 +485,8 @@ namespace game
                 if (score >= spawnScoreThreshold && powerItems.Count < dynamicCap)
                 {
                     // spawn chance increases as the player's score grows
-                    double baseChance = 0.6;
+                    // increase base chance so items appear more often
+                    double baseChance = 0.8;
                     double multiplier = 1.0;
                     if (score >= 100) multiplier *= 2.0; // double chance at 100
                     if (score >= 200) multiplier *= 2.0; // double again at 200 (total x4)
@@ -512,7 +516,7 @@ namespace game
                     }
                 }
 
-                powerItemSpawner.Interval = rnd.Next(5000, 12000);
+                powerItemSpawner.Interval = rnd.Next(3000, 8000);
             };
             powerItemSpawner.Start();
         }
