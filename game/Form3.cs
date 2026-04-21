@@ -119,6 +119,8 @@ namespace game
             this.AutoSize = false;
             this.MinimizeBox = false;
             this.MaximizeBox = false;
+            // prevent user resizing with mouse - keep programmatic resize (engine) working
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.Size = new Size(1000, 1000);
 
             // use crosshair cursor while playing
