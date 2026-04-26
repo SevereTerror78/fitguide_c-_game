@@ -1,0 +1,108 @@
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace game
+{
+    public static class DatabaseHelper
+    {
+        //public static string ConnectionString => "server=127.0.0.1;user=root;database=fitguide;password=;SslMode=none;";
+        public static string ConnectionString =>"Server=185.111.89.162;Port=3306;Database=fitguide_fitguide;Uid=fitguide;Pwd=!Z]odU0Rj5qKFR98;SslMode=None;";
+        public static (int id, string name, string password)? GetUserByEmail(string email)
+        {
+            using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+            {
+                conn.Open();
+                string q = "SELECT id, name, password FROM users WHERE email = @e LIMIT 1";
+
+                using (MySqlCommand cmd = new MySqlCommand(q, conn))
+                {
+                    cmd.Parameters.AddWithValue("@e", email);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int id = reader.GetInt32("id");
+                            string name = reader.GetString("name");
+                            string password = reader.GetString("password");
+                            return (id, name, password);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        public static (int score, int highScore)? GetGameScoresForUser(int userId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+            {
+                conn.Open();
+                string q = "SELECT score, highScore FROM game WHERE user_id = @uid LIMIT 1";
+                using (MySqlCommand cmd = new MySqlCommand(q, conn))
+                {
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            int score = reader.GetInt32("score");
+                            int hs = reader.GetInt32("highScore");
+                            return (score, hs);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static void UpsertGameScores(int userId, int score, int highScore)
+        {
+            using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+            {
+                conn.Open();
+                string update = "UPDATE game SET score = @s, highScore = @hs WHERE user_id = @uid";
+                using (MySqlCommand cmd = new MySqlCommand(update, conn))
+                {
+                    cmd.Parameters.AddWithValue("@s", score);
+                    cmd.Parameters.AddWithValue("@hs", highScore);
+                    cmd.Parameters.AddWithValue("@uid", userId);
+                    int affected = cmd.ExecuteNonQuery();
+                    if (affected == 0)
+                    {
+                        string insert = "INSERT INTO game (user_id, score, highScore) VALUES (@uid2, @s2, @hs2)";
+                        using (MySqlCommand cmd2 = new MySqlCommand(insert, conn))
+                        {
+                            cmd2.Parameters.AddWithValue("@uid2", userId);
+                            cmd2.Parameters.AddWithValue("@s2", score);
+                            cmd2.Parameters.AddWithValue("@hs2", highScore);
+                            cmd2.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+        }
+        public static void InsertDiscount(int userId, string code, DateTime expiry, decimal amount)
+        {
+            using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                string q = @"INSERT INTO discounts (user_id, discountCode, expiryDate, discountAmount, usedOrNot)
+                     VALUES (@u, @c, @e, @a, 0)";
+
+                using (MySqlCommand cmd = new MySqlCommand(q, conn))
+                {
+                    cmd.Parameters.AddWithValue("@u", userId);
+                    cmd.Parameters.AddWithValue("@c", code);
+                    cmd.Parameters.AddWithValue("@e", expiry);
+                    cmd.Parameters.AddWithValue("@a", amount);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+    }
+}

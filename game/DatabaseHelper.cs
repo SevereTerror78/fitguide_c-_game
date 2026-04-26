@@ -10,13 +10,14 @@ namespace game
     public static class DatabaseHelper
     {
         public static string ConnectionString => "server=127.0.0.1;user=root;database=fitguide;password=;SslMode=none;";
-
+        //public static string ConnectionString =>"Server=185.111.89.162;Port=3306;Database=fitguide_fitguide;Uid=fitguide;Pwd=!Z]odU0Rj5qKFR98;SslMode=None;";
         public static (int id, string name, string password)? GetUserByEmail(string email)
         {
             using (MySqlConnection conn = new MySqlConnection(ConnectionString))
             {
                 conn.Open();
                 string q = "SELECT id, name, password FROM users WHERE email = @e LIMIT 1";
+
                 using (MySqlCommand cmd = new MySqlCommand(q, conn))
                 {
                     cmd.Parameters.AddWithValue("@e", email);
