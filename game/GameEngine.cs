@@ -147,7 +147,17 @@ namespace game
             int newWidth = currentBounds.Width - actualShrink;
             int newHeight = currentBounds.Height - actualShrink;
 
+            // if either dimension reached minimum, end the game
             if (newWidth <= minWidth || newHeight <= minHeight)
+            {
+                ended = true;
+                Stop();
+                OnGameEnded?.Invoke();
+                return true;
+            }
+
+            // if no effective shrink is possible (due to external constraints), also end the game
+            if (newWidth >= currentBounds.Width || newHeight >= currentBounds.Height)
             {
                 ended = true;
                 Stop();

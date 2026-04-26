@@ -38,6 +38,12 @@ namespace game
         private List<Func<Form3, PowerDownBase>> powerDownFactories = new List<Func<Form3, PowerDownBase>>();
         private List<Func<Form3, PowerDownBase>> powerUpFactories = new List<Func<Form3, PowerDownBase>>();
         private bool gameEndedFlag = false;
+        // detect if form stops changing size despite shrink attempts
+        private int prevAppliedWidth = 0;
+        private int prevAppliedHeight = 0;
+        private int stuckCounterWidth = 0;
+        private int stuckCounterHeight = 0;
+        private const int StuckThreshold = 8; // number of iterations (~25ms * 8 = 200ms) to consider stuck
 
         /// <summary>
         /// Constructs the game form, initializes UI and game engine, registers power item factories
@@ -93,6 +99,35 @@ namespace game
 
                             if (!ended)
                             {
+                                // detect if width/height stopped changing despite shrink attempts
+                                if (prevAppliedWidth == bounds.Width)
+                                {
+                                    stuckCounterWidth++;
+                                }
+                                else
+                                {
+                                    stuckCounterWidth = 0;
+                                }
+                                if (prevAppliedHeight == bounds.Height)
+                                {
+                                    stuckCounterHeight++;
+                                }
+                                else
+                                {
+                                    stuckCounterHeight = 0;
+                                }
+
+                                prevAppliedWidth = bounds.Width;
+                                prevAppliedHeight = bounds.Height;
+
+                                // if either dimension is stuck for several iterations, treat as game end
+                                if (stuckCounterWidth >= StuckThreshold || stuckCounterHeight >= StuckThreshold)
+                                {
+                                    try { engine?.Stop(); } catch { }
+                                    try { Engine_OnGameEnded(); } catch { }
+                                    return;
+                                }
+
                                 this.Width = bounds.Width;
                                 this.Height = bounds.Height;
                                 this.Left = bounds.Left;
@@ -313,45 +348,47 @@ namespace game
         {
             // mark game ended so other UI (pause dialog) won't appear
             gameEndedFlag = true;
+            int finalScore = engine.GetElapsedTime();
+            // marshal to UI thread to run finish logic
+            try { this.Invoke((MethodInvoker)(() => FinishGame(finalScore))); } catch { FinishGame(finalScore); }
+        }
 
-            this.Invoke((MethodInvoker)(() =>
+        /// <summary>
+        /// Finishes the game: persists score, awards discount if applicable, shows messages and closes the form.
+        /// This method must be called on the UI thread.
+        /// </summary>
+        /// <param name="finalScore">Final elapsed time/score.</param>
+        private void FinishGame(int finalScore)
+        {
+            if (gameEndedFlag == false) gameEndedFlag = true;
+            try
             {
-                int finalScore = engine.GetElapsedTime();
+                scoreManager.AppendScore(username, finalScore);
+            }
+            catch { }
+
+            if (finalScore > 50)
+            {
                 try
                 {
-                    scoreManager.AppendScore(username, finalScore);
+                    int userId = userManager.CurrentUserId;
+                    string coupon = CouponGenerator.Generate(12);
+                    DateTime expiry = DateTime.Now.AddDays(7);
+                    decimal amount = 15;
+                    DatabaseHelper.InsertDiscount(userId, coupon, expiry, amount);
+                    MessageBox.Show($"Gratulálunk!\nNyertél egy kupont:\n\n{coupon}\n\nÉrvényes: {expiry:yyyy-MM-dd}", "Kupon nyertél!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch { }
+            }
 
-                if (finalScore > 50)
-                {
-                    int userId = userManager.CurrentUserId;
+            MessageBox.Show("The game has ended!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    string coupon = CouponGenerator.Generate(12);
+            // cleanup power items and spawner
+            try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
+            foreach (var pd in powerItems) pd?.Destroy();
+            powerItems.Clear();
 
-                    DateTime expiry = DateTime.Now.AddDays(7);
-
-                    decimal amount = 15;
-
-                    DatabaseHelper.InsertDiscount(userId, coupon, expiry, amount);
-
-                    MessageBox.Show(
-                        $"Gratulálunk!\nNyertél egy kupont:\n\n{coupon}\n\nÉrvényes: {expiry:yyyy-MM-dd}",
-                        "Kupon nyertél!",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                }
-
-                MessageBox.Show("The game has ended!", "Game over!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // cleanup power items and spawner
-                try { powerItemSpawner?.Stop(); powerItemSpawner?.Dispose(); } catch { }
-                foreach (var pd in powerItems) pd?.Destroy();
-                powerItems.Clear();
-
-                this.Close();
-            }));
+            try { this.Close(); } catch { }
         }
 
         /// <summary>
